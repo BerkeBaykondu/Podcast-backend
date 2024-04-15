@@ -1,4 +1,9 @@
 {
+  "printWidth": 150,
+  "semi": false,
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "tabWidth": 2,
+  "ignorePatterns": ["src/config/"]
 }
