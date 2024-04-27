@@ -4,7 +4,6 @@ import { PodcastService } from './podcast.service'
 import { UpdatePodcastDto } from './interface/update-podcast.dto'
 import { IPodcast } from './interface/podcast.interface'
 import { TypedBody, TypedRoute } from '@nestia/core'
-import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('podcast')
 export class PodcastController {
@@ -20,6 +19,11 @@ export class PodcastController {
   async fetchTrt() {
     return await this.podcastService.fetchTrtData()
   }
+
+  // @Post('process')
+  // async processImage(@Body() imageData: { data: string }): Promise<any> {
+  //   return this.podcastService.processImage(imageData.data)
+  // }
 
   @Get()
   findAll() {
