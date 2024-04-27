@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { PodcastModule } from './podcast/podcast.module'
 import { AwsModule } from './aws/aws.module'
 import { ConfigModule } from '@nestjs/config'
+import { APP_FILTER } from '@nestjs/core'
+import { AllExceptionsFilter } from './core/pipe/exception.filter'
 
 @Module({
   imports: [
@@ -16,6 +18,12 @@ import { ConfigModule } from '@nestjs/config'
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {}
