@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
@@ -18,37 +18,40 @@ export class AwsService {
     await this.s3.send(
       new PutObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `deneme3/${fileName}`,
+        Key: `deneme4/${fileName}`,
         Body: file,
       }),
     )
   }
 
-  async delete(fileName: string, folderName: String) {
+  async delete(fileName: string, folderName: string): Promise<void> {
     // list files in specific folder
+
     const filesInFolder = await this.s3.send(
       new ListObjectsV2Command({
         Bucket: process.env.BUCKETNAME,
-        Prefix: `${folderName}/`,
+        Prefix: `deneme3/`,
       }),
     )
-    // create delete file promises ( files in that folder)
-    const deletePromises = filesInFolder.Contents!.map((object) => {
-      return this.s3.send(
-        new DeleteObjectCommand({
-          Bucket: process.env.BUCKETNAME,
-          Key: object.Key,
-        }),
-      )
-    })
-    // deleting process
-    await Promise.all(deletePromises)
+    // console.log(filesInFolder.Contents)
+
+    // // create delete file promises ( files in that folder)
+    // const deletePromises = filesInFolder.Contents!.map((object) => {
+    //   return this.s3.send(
+    //     new DeleteObjectCommand({
+    //       Bucket: process.env.BUCKETNAME,
+    //       Key: object.Key!,
+    //     }),
+    //   )
+    // })
+    // // deleting process
+    // await Promise.all(deletePromises)
 
     // delete the folder
     await this.s3.send(
       new DeleteObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${folderName}/`,
+        Key: `deneme3/grokking-algorithms-illustrated-programmers-curious.pdf`,
       }),
     )
   }

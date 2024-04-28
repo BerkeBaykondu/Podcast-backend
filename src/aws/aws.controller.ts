@@ -12,12 +12,7 @@ export class AwsController {
     private readonly podcastService: PodcastService,
   ) {}
   @TypedRoute.Post()
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'image', maxCount: 1 },
-      { name: 'audio', maxCount: 1 },
-    ]),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile(
       new ParseFilePipe({
@@ -34,9 +29,12 @@ export class AwsController {
     req.user = '313131313'
     return await Promise.allSettled([this.awsService.upload(file.originalname, file.buffer), this.podcastService.create(createPodcastDto, req.user)])
   }
-  @Delete()
-  async deleteFile(fileName: string, folderName: string, @Param('podcastId') podcastId, @Req() req) {
+  @Delete(':podcastId')
+  async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
     req.user = '313131313'
-    await Promise.allSettled([this.awsService.delete(fileName, folderName), this.podcastService.delete(podcastId, req.user)])
+    await Promise.allSettled([
+      this.awsService.delete(deletePodcastDto.fileName, deletePodcastDto.folderName),
+      this.podcastService.delete(podcastId, req.user),
+    ])
   }
 }

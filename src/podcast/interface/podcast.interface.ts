@@ -13,6 +13,11 @@ export namespace IPodcast {
     category: string
     description: string
   }
+
+  export interface IDeletePodcast {
+    fileName: string
+    folderName: string
+  }
 }
 
 export enum Category {
