@@ -9,21 +9,10 @@ import { TypedBody, TypedRoute } from '@nestia/core'
 export class PodcastController {
   constructor(private readonly podcastService: PodcastService) {}
 
-  @TypedRoute.Post()
-  async create(@Req() req, @TypedBody() createPodcastDto: IPodcast.IUploadPodcast) {
-    req.user = '313131313'
-    return this.podcastService.create(createPodcastDto, req.user)
-  }
-
-  @Get()
+  @Get('fetchTrtData')
   async fetchTrt() {
     return await this.podcastService.fetchTrtData()
   }
-
-  // @Post('process')
-  // async processImage(@Body() imageData: { data: string }): Promise<any> {
-  //   return this.podcastService.processImage(imageData.data)
-  // }
 
   @Get()
   findAll() {

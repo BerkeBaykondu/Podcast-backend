@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, ParseFilePipe, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseFilePipe, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { AwsService } from './aws.service'
-import { FileInterceptor } from '@nestjs/platform-express'
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express'
 import { TypedBody, TypedRoute } from '@nestia/core'
 import { IPodcast } from 'src/podcast/interface/podcast.interface'
 import { PodcastService } from 'src/podcast/podcast.service'
@@ -12,7 +12,12 @@ export class AwsController {
     private readonly podcastService: PodcastService,
   ) {}
   @TypedRoute.Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'image', maxCount: 1 },
+      { name: 'audio', maxCount: 1 },
+    ]),
+  )
   async uploadFile(
     @UploadedFile(
       new ParseFilePipe({
@@ -30,8 +35,8 @@ export class AwsController {
     return await Promise.allSettled([this.awsService.upload(file.originalname, file.buffer), this.podcastService.create(createPodcastDto, req.user)])
   }
   @Delete()
-  async deleteFile(fileName: string, folderName: string, key: string) {
-    await Promise.allSettled([this.awsService.delete(fileName, folderName, key)])
-    //await this.awsService.delete(fileName, folderName, key)
+  async deleteFile(fileName: string, folderName: string, @Param('podcastId') podcastId, @Req() req) {
+    req.user = '313131313'
+    await Promise.allSettled([this.awsService.delete(fileName, folderName), this.podcastService.delete(podcastId, req.user)])
   }
 }
