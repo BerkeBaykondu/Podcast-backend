@@ -8,9 +8,6 @@ import { AwsService } from 'src/aws/aws.service'
 import { UserService } from 'src/user/user.service'
 import * as sharp from 'sharp'
 import axios from 'axios'
-// import { createCanvas, loadImage } from 'canvas'
-// import * as fs from 'fs'
-// import * as path from 'path'    silinecek kütüphaneler!!!!
 
 @Injectable()
 export class PodcastService {
@@ -21,6 +18,11 @@ export class PodcastService {
   async create(createPodcastDto: IPodcast.IUploadPodcast, user): Promise<any> {
     const podcast = await this.podcastModel.create(createPodcastDto)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
+  }
+
+  async delete(podcastId: any, user) {
+    await this.podcastModel.deleteOne({ _id: podcastId })
+    return await this.userService.findOneAndUpdate({ user_id: user }, { $pull: { createdPocastList: podcastId } }, { new: true })
   }
 
   async fetchTrtData() {
@@ -66,25 +68,6 @@ export class PodcastService {
         return `data:image/webp;base64,${base64}`
       })
   }
-
-  // async processImage(base64Data: string): Promise<any> {
-  //   // Veriyi temizle
-  //   const base64 = base64Data.split(';base64,').pop()
-  //   const buffer = Buffer.from(base64!, 'base64')
-
-  //   const image = await loadImage(buffer)
-  //   const canvas = createCanvas(image.width, image.height)
-  //   const context = canvas.getContext('2d')
-
-  //   // Resmi çiz
-  //   context.drawImage(image, 0, 0)
-
-  //   // Resmi görüntülemek için
-  //   const imageData = canvas.toDataURL('image/png')
-  //   console.log(imageData)
-
-  //   return imageData
-  // }
 
   findAll() {
     return `This action returns all podcast`

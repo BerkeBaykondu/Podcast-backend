@@ -18,13 +18,13 @@ export class AwsService {
     await this.s3.send(
       new PutObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `deneme2/${fileName}`,
+        Key: `deneme3/${fileName}`,
         Body: file,
       }),
     )
   }
 
-  async delete(fileName: string, folderName: String, key) {
+  async delete(fileName: string, folderName: String) {
     // list files in specific folder
     const filesInFolder = await this.s3.send(
       new ListObjectsV2Command({
