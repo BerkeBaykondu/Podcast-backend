@@ -6,7 +6,7 @@ import { Podcast, PodcastDocument } from './schema/podcast.schema'
 import { Model } from 'mongoose'
 import { AwsService } from 'src/aws/aws.service'
 import { UserService } from 'src/user/user.service'
-import * as sharp from 'sharp'
+import sharp from 'sharp'
 import axios from 'axios'
 
 @Injectable()
