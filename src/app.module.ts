@@ -12,7 +12,7 @@ import { AllExceptionsFilter } from './core/pipe/exception.filter'
 @Module({
   imports: [
     UserModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/podcast'),
+    MongooseModule.forRoot('mongodb+srv://berke:x4UpWhhqx6z0uZ6q@cluster0.po5lgyi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
     PodcastModule,
     AwsModule,
     ConfigModule.forRoot({ isGlobal: true }),
