@@ -10,7 +10,13 @@ import { APP_FILTER } from '@nestjs/core'
 import { AllExceptionsFilter } from './core/pipe/exception.filter'
 
 @Module({
-  imports: [UserModule, MongooseModule.forRoot(process.env.MONGODB_URL!), PodcastModule, AwsModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    UserModule,
+    MongooseModule.forRoot('mongodb+srv://berke:x4UpWhhqx6z0uZ6q@cluster0.po5lgyi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
+    PodcastModule,
+    AwsModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+  ],
   controllers: [AppController],
   providers: [
     AppService,
