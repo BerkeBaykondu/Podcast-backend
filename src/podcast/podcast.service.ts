@@ -48,26 +48,31 @@ export class PodcastService {
     delete trtData.description
     delete trtData.featuredImage
     delete trtData.isLiked
-    delete trtData.isFavourite
+    delete trtData.isFavorite
     delete trtData.score
     delete trtData.popularity
     delete trtData.popular
 
     trtData.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 300, 300)
-    var sets = await Promise.all(
-      trtData.sets.map(async (item, index) => {
+    trtData.homepageImage = await this.modifyPodcastImage(trtData.homepageImage, 300, 300)
+
+    await Promise.all(
+      trtData.sets.map(async (set, index) => {
+        delete set.featuredImage
+        delete set.layout
+        delete set.index
         return {
-          ...item,
+          ...set,
           contents: await Promise.all(
-            item.contents.map(async (content) => {
+            set.contents.map(async (content) => {
               delete content.featuredImage
-              delete content.layout
+
               if (index == 0) {
                 content.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 400, 400)
-                trtData.featuredPodcasts = item
+                trtData.featuredPodcasts = set
               } else if (index == 1) {
                 content.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 300, 300)
-                trtData.podcastGenres = item
+                trtData.podcastGenres = set
               } else {
                 content.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 200, 200)
               }
