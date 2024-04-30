@@ -9,7 +9,7 @@ import { TypedBody, TypedRoute } from '@nestia/core'
 export class PodcastController {
   constructor(private readonly podcastService: PodcastService) {}
 
-  @Get('fetchTrtData')
+  @Get('fetchTrtPodcast')
   async fetchTrt() {
     return await this.podcastService.fetchTrtData()
   }
