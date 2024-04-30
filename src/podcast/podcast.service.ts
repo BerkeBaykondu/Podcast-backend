@@ -7,7 +7,6 @@ import { Model } from 'mongoose'
 import { AwsService } from 'src/aws/aws.service'
 import { UserService } from 'src/user/user.service'
 import sharp from 'sharp'
-import axios from 'axios'
 
 @Injectable()
 export class PodcastService {
@@ -88,13 +87,11 @@ export class PodcastService {
   }
 
   async modifyPodcastImage(imageUrl, width, height) {
-    return axios
-      .get(imageUrl, { responseType: 'arraybuffer' })
-      .then((response) => sharp(response.data).resize({ width: width, height: height }).webp().toBuffer())
-      .then((resizedImage) => {
-        const base64 = resizedImage.toString('base64')
-        return `data:image/webp;base64,${base64}`
-      })
+    const response = await fetch(imageUrl)
+    const buffer = await response.arrayBuffer()
+    const resizedImage = await sharp(Buffer.from(buffer)).resize({ width: width, height: height }).webp().toBuffer()
+    const base64 = resizedImage.toString('base64')
+    return `data:image/webp;base64,${base64}`
   }
 
   findAll() {
