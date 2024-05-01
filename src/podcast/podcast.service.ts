@@ -4,9 +4,9 @@ import { UpdatePodcastDto } from './interface/update-podcast.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { Podcast, PodcastDocument } from './schema/podcast.schema'
 import { Model } from 'mongoose'
-import { AwsService } from 'src/aws/aws.service'
 import { UserService } from 'src/user/user.service'
 import sharp from 'sharp'
+import { ObjectId } from 'mongodb'
 
 @Injectable()
 export class PodcastService {
@@ -19,9 +19,17 @@ export class PodcastService {
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
 
-  async delete(podcastId: any, user) {
-    await this.podcastModel.deleteOne({ _id: podcastId })
-    return await this.userService.findOneAndUpdate({ user_id: user }, { $pull: { createdPocastList: podcastId } }, { new: true })
+  async delete(podcastId: any, user): Promise<any> {
+    // Convert podcastId to ObjectId
+    const podcastObjectId = ObjectId.createFromHexString(podcastId)
+
+    // Delete the podcast
+    await this.podcastModel.deleteOne({ _id: podcastObjectId })
+
+    // Remove the podcast from the user's createdPodcastList
+    const updatedUser = await this.userService.findOneAndUpdate({ user_id: user }, { $pull: { createdPodcastList: podcastObjectId } }, { new: true })
+
+    return updatedUser
   }
 
   async fetchTrtData() {
