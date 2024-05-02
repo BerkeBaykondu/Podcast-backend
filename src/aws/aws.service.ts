@@ -14,14 +14,16 @@ export class AwsService {
       },
     })
   }
-  async upload(fileName: string, file: Buffer): Promise<void> {
-    await this.s3.send(
-      new PutObjectCommand({
-        Bucket: process.env.BUCKETNAME,
-        Key: `deneme4/${fileName}`,
-        Body: file,
-      }),
-    )
+  async upload(files): Promise<void> {
+    files.map(async (file) => {
+      await this.s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.BUCKETNAME,
+          Key: `deneme41/${file.originalname}`,
+          Body: file.buffer,
+        }),
+      )
+    })
   }
 
   async delete(fileName: string, folderName: string): Promise<void> {

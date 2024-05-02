@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseFilePipe, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseFilePipe, Post, Req, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common'
 import { AwsService } from './aws.service'
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express'
+import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express'
 import { TypedBody, TypedRoute } from '@nestia/core'
 import { IPodcast } from 'src/podcast/interface/podcast.interface'
 import { PodcastService } from 'src/podcast/podcast.service'
+import { FileTypePipe } from 'src/core/pipe/upload.pipe'
+import { FileUpload } from 'src/core/model/http-upload-file-interface'
 
 @Controller('aws')
 export class AwsController {
@@ -11,23 +13,18 @@ export class AwsController {
     private readonly awsService: AwsService,
     private readonly podcastService: PodcastService,
   ) {}
-  @TypedRoute.Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @Post()
+  @UseInterceptors(FilesInterceptor('file', 2))
   async uploadFile(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          // new MaxFileSizeValidator({ maxSize: 1000 }),
-          // new FileTypeValidator({ fileType: 'image/jpeg' }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
-    @Body() createPodcastDto: IPodcast.IUploadPodcast,
+    @UploadedFiles(new FileTypePipe())
+    files: Array<Express.Multer.File>,
+    @Body()
+    createPodcastDto: IPodcast.IUploadPodcast,
     @Req() req,
   ) {
     req.user = '313131313'
-    return await Promise.allSettled([this.awsService.upload(file.originalname, file.buffer), this.podcastService.create(createPodcastDto, req.user)])
+    console.log(files)
+    return await Promise.allSettled([this.awsService.upload(files), this.podcastService.create(createPodcastDto, req.user)])
   }
   @Delete(':podcastId')
   async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
