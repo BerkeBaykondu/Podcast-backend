@@ -1,6 +1,6 @@
 // file-type.pipe.ts
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common'
-import { FileUpload } from '../model/http-upload-file-interface'
+import { FileUpload } from 'src/core/model/http-upload-file-interface'
 
 @Injectable()
 export class FileTypePipe implements PipeTransform<any> {
