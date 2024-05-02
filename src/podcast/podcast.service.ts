@@ -15,7 +15,7 @@ export class PodcastService {
     private readonly userService: UserService,
   ) {}
   async create(createPodcastDto: IPodcast.IUploadPodcast, user, urls): Promise<any> {
-    const podcast = await this.podcastModel.create(createPodcastDto)
+    const podcast = await this.podcastModel.create({ ...createPodcastDto, imageUrl: urls[0], audioUrl: urls[1] })
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
 
@@ -24,6 +24,10 @@ export class PodcastService {
     await this.podcastModel.deleteOne({ _id: podcastObjectId })
     const updatedUser = await this.userService.findOneAndUpdate({ user_id: user }, { $pull: { createdPodcastList: podcastObjectId } }, { new: true })
     return updatedUser
+  }
+
+  async findAll() {
+    return await this.podcastModel.find()
   }
 
   async fetchTrtData() {
@@ -94,10 +98,6 @@ export class PodcastService {
     const resizedImage = await sharp(Buffer.from(buffer)).resize({ width: width, height: height }).webp().toBuffer()
     const base64 = resizedImage.toString('base64')
     return `data:image/webp;base64,${base64}`
-  }
-
-  findAll() {
-    return `This action returns all podcast`
   }
 
   findOne(id: number) {
