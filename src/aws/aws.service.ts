@@ -1,11 +1,21 @@
-import { DeleteObjectCommand, DeleteObjectsCommand, ListObjectsCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  ListObjectsCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable } from '@nestjs/common'
+import { PodcastService } from 'src/podcast/podcast.service'
 
 @Injectable()
 export class AwsService {
   private s3: S3Client
 
-  constructor() {
+  constructor(private readonly podcastService: PodcastService) {
     this.s3 = new S3Client({
       region: process.env.BUCKETREGION!,
       credentials: {
@@ -14,7 +24,8 @@ export class AwsService {
       },
     })
   }
-  async upload(files): Promise<void> {
+  async upload(files, createPodcastDto, user): Promise<any> {
+    let webpAndmp3Urls: string[] = []
     files.map(async (file) => {
       await this.s3.send(
         new PutObjectCommand({
@@ -23,7 +34,20 @@ export class AwsService {
           Body: file.buffer,
         }),
       )
+      const url = await getSignedUrl(
+        this.s3,
+        new GetObjectCommand({
+          Bucket: process.env.BUCKETNAME,
+          Key: `deneme41/${file.originalname}`,
+        }),
+        { expiresIn: 3600 },
+      )
+
+      webpAndmp3Urls.push(url)
+      return url
     })
+
+    this.podcastService.create(createPodcastDto, user, webpAndmp3Urls)
   }
 
   async delete(fileName: string, folderName: string): Promise<void> {

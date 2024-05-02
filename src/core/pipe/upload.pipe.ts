@@ -4,7 +4,7 @@ import { FileUpload } from '../model/http-upload-file-interface'
 
 @Injectable()
 export class FileTypePipe implements PipeTransform<any> {
-  async transform(value: any): Promise<any> {
+  async transform(value: FileUpload[]): Promise<any> {
     console.log(value)
 
     if (!value || value.length !== 2) {
