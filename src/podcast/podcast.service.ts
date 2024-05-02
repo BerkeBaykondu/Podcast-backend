@@ -14,21 +14,15 @@ export class PodcastService {
     @InjectModel(Podcast.name) private podcastModel: Model<PodcastDocument>,
     private readonly userService: UserService,
   ) {}
-  async create(createPodcastDto: IPodcast.IUploadPodcast, user): Promise<any> {
+  async create(createPodcastDto: IPodcast.IUploadPodcast, user, urls): Promise<any> {
     const podcast = await this.podcastModel.create(createPodcastDto)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
 
   async delete(podcastId: any, user): Promise<any> {
-    // Convert podcastId to ObjectId
     const podcastObjectId = ObjectId.createFromHexString(podcastId)
-
-    // Delete the podcast
     await this.podcastModel.deleteOne({ _id: podcastObjectId })
-
-    // Remove the podcast from the user's createdPodcastList
     const updatedUser = await this.userService.findOneAndUpdate({ user_id: user }, { $pull: { createdPodcastList: podcastObjectId } }, { new: true })
-
     return updatedUser
   }
 

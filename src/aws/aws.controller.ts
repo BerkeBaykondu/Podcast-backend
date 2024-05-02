@@ -23,8 +23,7 @@ export class AwsController {
     @Req() req,
   ) {
     req.user = '313131313'
-    console.log(files)
-    return await Promise.allSettled([this.awsService.upload(files), this.podcastService.create(createPodcastDto, req.user)])
+    return await this.awsService.upload(files, createPodcastDto, req.user)
   }
   @Delete(':podcastId')
   async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
