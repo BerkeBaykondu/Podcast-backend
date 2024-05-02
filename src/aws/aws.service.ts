@@ -26,11 +26,11 @@ export class AwsService {
   }
   async upload(files, createPodcastDto, user): Promise<any> {
     let webpAndmp3Urls: string[] = []
-    files.map(async (file) => {
+    const uploadAndGetUrlPromises = files.map(async (file) => {
       await this.s3.send(
         new PutObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `deneme41/${file.originalname}`,
+          Key: `deneme13341/${file.originalname}`,
           Body: file.buffer,
         }),
       )
@@ -38,16 +38,17 @@ export class AwsService {
         this.s3,
         new GetObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `deneme41/${file.originalname}`,
+          Key: `deneme13341/${file.originalname}`,
         }),
         { expiresIn: 3600 },
       )
-
       webpAndmp3Urls.push(url)
       return url
     })
 
-    this.podcastService.create(createPodcastDto, user, webpAndmp3Urls)
+    await Promise.all(uploadAndGetUrlPromises)
+
+    await this.podcastService.create(createPodcastDto, user, webpAndmp3Urls)
   }
 
   async delete(fileName: string, folderName: string): Promise<void> {

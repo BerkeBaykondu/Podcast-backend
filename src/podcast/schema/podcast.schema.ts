@@ -10,6 +10,10 @@ export class Podcast {
   description: string
   @Prop({})
   category: string
+  @Prop({})
+  imageUrl: string
+  @Prop({})
+  audioUrl: string
   @Prop({ default: 0 })
   totalLike: number
 }
