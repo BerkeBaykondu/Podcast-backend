@@ -38,7 +38,7 @@ export class AwsService {
         this.s3,
         new GetObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `${user}/${file.originalname}`,
+          Key: `${user}/${createPodcastDto.name}/${file.originalname}`,
         }),
       )
       webpAndmp3Urls.push(url)
