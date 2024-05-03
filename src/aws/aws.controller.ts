@@ -4,7 +4,7 @@ import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor, FilesInter
 import { TypedBody, TypedRoute } from '@nestia/core'
 import { IPodcast } from 'src/podcast/interface/podcast.interface'
 import { PodcastService } from 'src/podcast/podcast.service'
-import { FileTypePipe } from '../core/pipe/upload.pipe'
+import { FileTypePipe } from 'src/core/pipe/upload.pipe'
 
 @Controller('aws')
 export class AwsController {
