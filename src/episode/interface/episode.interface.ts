@@ -4,6 +4,7 @@ export interface IEpisode {
   description: string
   imageUrl: string
   audioUrl: string
+  totalLike: number
   createdAt?: any
   updatedAt?: any
 }
