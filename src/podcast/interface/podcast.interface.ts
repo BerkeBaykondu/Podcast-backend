@@ -12,13 +12,21 @@ export interface IPodcast {
 export namespace IPodcast {
   export interface IUploadPodcast {
     name: string
-    category: string
+    category: Category
     description: string
   }
 
   export interface IDeletePodcast {
     fileName: string
     folderName: string
+  }
+
+  export interface ICreatePodcastWithFirstEpisode {
+    podcastName: string
+    podcastDescription: string
+    podcastCategory: Category
+    episodeName: string
+    episodeDescription: string
   }
 }
 

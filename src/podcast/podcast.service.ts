@@ -7,6 +7,7 @@ import { Model } from 'mongoose'
 import { UserService } from 'src/user/user.service'
 import sharp from 'sharp'
 import { ObjectId } from 'mongodb'
+import { Episode } from 'src/episode/schema/episode.schema'
 
 @Injectable()
 export class PodcastService {
@@ -14,8 +15,24 @@ export class PodcastService {
     @InjectModel(Podcast.name) private podcastModel: Model<PodcastDocument>,
     private readonly userService: UserService,
   ) {}
-  async create(createPodcastDto: IPodcast.IUploadPodcast, user, urls): Promise<any> {
-    const podcast = await this.podcastModel.create({ ...createPodcastDto, imageUrl: urls[0], audioUrl: urls[1] })
+  async create(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls): Promise<any> {
+    const firstEpisode: Episode = {
+      name: createPodcastDto.episodeName,
+      description: createPodcastDto.episodeDescription,
+      imageUrl: urls[0],
+      audioUrl: urls[1],
+      totalLike: 0,
+    }
+
+    const newPodcast: Podcast = {
+      name: createPodcastDto.podcastName,
+      category: createPodcastDto.podcastCategory,
+      description: createPodcastDto.podcastDescription,
+      episodes: [firstEpisode],
+      imageUrl: urls[0],
+      totalLike: 0,
+    }
+    const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
 

@@ -8,6 +8,7 @@ import { AwsModule } from './aws/aws.module'
 import { ConfigModule } from '@nestjs/config'
 import { APP_FILTER } from '@nestjs/core'
 import { AllExceptionsFilter } from './core/pipe/exception.filter'
+import { EpisodeModule } from './episode/episode.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AllExceptionsFilter } from './core/pipe/exception.filter'
     PodcastModule,
     AwsModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    EpisodeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -14,15 +14,15 @@ export class AwsController {
   ) {}
   @Post()
   @UseInterceptors(FilesInterceptor('file', 2))
-  async uploadFile(
+  async createPodcastWithFirstEpisode(
     @UploadedFiles(new FileTypePipe())
     files: Array<Express.Multer.File>,
     @Body()
-    createPodcastDto: IPodcast.IUploadPodcast,
+    createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode,
     @Req() req,
   ) {
     req.user = '313131313'
-    return await this.awsService.upload(files, createPodcastDto, req.user)
+    return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
   }
   @Delete(':podcastId')
   async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
