@@ -3,6 +3,8 @@ export interface IPodcast {
   name: string
   description: string
   category: string
+  imageUrl: string
+  audioUrl: string
   createdAt?: any
   updatedAt?: any
 }
