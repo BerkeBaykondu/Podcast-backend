@@ -30,7 +30,7 @@ export class AwsService {
       await this.s3.send(
         new PutObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `${user}/${file.originalname}`,
+          Key: `${user}/${createPodcastDto.name}/${file.originalname}`,
           Body: file.buffer,
         }),
       )
