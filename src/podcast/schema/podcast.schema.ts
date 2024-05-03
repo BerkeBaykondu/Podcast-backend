@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { HydratedDocument } from 'mongoose'
-import { Episode } from 'src/episode/schema/episode.schema'
+import { Episode } from '../../episode/schema/episode.schema'
 
 export type PodcastDocument = HydratedDocument<Podcast>
 @Schema({ timestamps: true })
