@@ -7,7 +7,7 @@ import { Model } from 'mongoose'
 import { UserService } from 'src/user/user.service'
 import sharp from 'sharp'
 import { ObjectId } from 'mongodb'
-import { Episode } from '../episode/schema/episode.schema'
+import { IEpisode } from '../episode/interface/episode.interface'
 
 @Injectable()
 export class PodcastService {
@@ -16,7 +16,7 @@ export class PodcastService {
     private readonly userService: UserService,
   ) {}
   async create(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls): Promise<any> {
-    const firstEpisode: Episode = {
+    const firstEpisode: IEpisode = {
       name: createPodcastDto.episodeName,
       description: createPodcastDto.episodeDescription,
       imageUrl: urls[0],
