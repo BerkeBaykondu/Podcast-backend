@@ -40,7 +40,6 @@ export class AwsService {
           Bucket: process.env.BUCKETNAME,
           Key: `deneme13341/${file.originalname}`,
         }),
-        { expiresIn: 3600 },
       )
       webpAndmp3Urls.push(url)
       return url
