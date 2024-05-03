@@ -7,7 +7,7 @@ import { Model } from 'mongoose'
 import { UserService } from 'src/user/user.service'
 import sharp from 'sharp'
 import { ObjectId } from 'mongodb'
-import { Episode } from 'src/episode/schema/episode.schema'
+import { Episode } from '../episode/schema/episode.schema'
 
 @Injectable()
 export class PodcastService {
