@@ -30,7 +30,7 @@ export class AwsService {
       await this.s3.send(
         new PutObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `deneme13341/${file.originalname}`,
+          Key: `${user}/${file.originalname}`,
           Body: file.buffer,
         }),
       )
@@ -38,7 +38,7 @@ export class AwsService {
         this.s3,
         new GetObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `deneme13341/${file.originalname}`,
+          Key: `${user}/${file.originalname}`,
         }),
       )
       webpAndmp3Urls.push(url)
