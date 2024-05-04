@@ -46,6 +46,7 @@ export class PodcastService {
       totalLike: 0,
       owner: user,
     }
+    console.log(newPodcast)
     const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
@@ -59,6 +60,10 @@ export class PodcastService {
 
   async findAll() {
     return await this.podcastModel.find()
+  }
+
+  async findMainPage() {
+    return await this.podcastModel.find().select('-episodes')
   }
 
   async fetchTrtData() {

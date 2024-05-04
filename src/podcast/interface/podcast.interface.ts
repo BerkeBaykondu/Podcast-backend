@@ -12,7 +12,7 @@ export interface IPodcast {
 export namespace IPodcast {
   export interface IUploadPodcast {
     name: string
-    category: Category
+    category: string
     description: string
   }
 
