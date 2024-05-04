@@ -31,6 +31,7 @@ export class PodcastService {
       episodes: [firstEpisode],
       imageUrl: urls[0],
       totalLike: 0,
+      owner: user,
     }
     const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
@@ -43,6 +44,7 @@ export class PodcastService {
       episodes: [],
       imageUrl: url,
       totalLike: 0,
+      owner: user,
     }
     const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { HydratedDocument } from 'mongoose'
+import mongoose, { HydratedDocument, Types } from 'mongoose'
 import { Episode } from '../../episode/schema/episode.schema'
 
 export type PodcastDocument = HydratedDocument<Podcast>
@@ -17,6 +17,8 @@ export class Podcast {
   totalLike: number
   @Prop({ type: [Episode], required: true })
   episodes: Episode[]
+  @Prop({ type: String, required: true })
+  owner: string
 }
 
 export const podcastSchema = SchemaFactory.createForClass(Podcast)
