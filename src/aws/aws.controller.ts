@@ -41,7 +41,11 @@ export class AwsController {
   @Post('emptyPodcast')
   @UseInterceptors(FileInterceptor('file'))
   async createEmptyPodcast(
-    @UploadedFile()
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'image/webp' })],
+      }),
+    )
     file: Express.Multer.File,
     @Body()
     createEmptyPodcastDto: IPodcast.IUploadPodcast,
@@ -50,6 +54,16 @@ export class AwsController {
     req.user = '313131313'
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
+
+  @Post('addEpisode')
+  @UseInterceptors(FileInterceptor('file'))
+  async createEpisode(
+    @UploadedFile()
+    file: Express.Multer.File,
+    @Body()
+    createEmptyPodcastDto: IPodcast.IUploadPodcast,
+    @Req() req,
+  ) {}
 
   @Delete(':podcastId')
   async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
