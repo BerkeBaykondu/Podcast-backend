@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Param, ParseFilePipe, Post, Req, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  FileTypeValidator,
+  Get,
+  Param,
+  ParseFilePipe,
+  Post,
+  Req,
+  UploadedFile,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common'
 import { AwsService } from './aws.service'
 import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express'
 import { TypedBody, TypedRoute } from '@nestia/core'
@@ -12,7 +25,7 @@ export class AwsController {
     private readonly awsService: AwsService,
     private readonly podcastService: PodcastService,
   ) {}
-  @Post()
+  @Post('withEpisode')
   @UseInterceptors(FilesInterceptor('file', 2))
   async createPodcastWithFirstEpisode(
     @UploadedFiles(new FileTypePipe())
@@ -24,6 +37,20 @@ export class AwsController {
     req.user = '313131313'
     return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
   }
+
+  @Post('emptyPodcast')
+  @UseInterceptors(FileInterceptor('file'))
+  async createEmptyPodcast(
+    @UploadedFile()
+    file: Express.Multer.File,
+    @Body()
+    createEmptyPodcastDto: IPodcast.IUploadPodcast,
+    @Req() req,
+  ) {
+    req.user = '313131313'
+    return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
+  }
+
   @Delete(':podcastId')
   async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
     req.user = '313131313'
