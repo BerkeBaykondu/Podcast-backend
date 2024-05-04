@@ -35,6 +35,18 @@ export class PodcastService {
     const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
+  async createEmptyPodcast(createEmptyPodcastDto, user, url) {
+    const newPodcast: Podcast = {
+      name: createEmptyPodcastDto.name,
+      category: createEmptyPodcastDto.category,
+      description: createEmptyPodcastDto.description,
+      episodes: [],
+      imageUrl: url,
+      totalLike: 0,
+    }
+    const podcast = await this.podcastModel.create(newPodcast)
+    return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
+  }
 
   async delete(podcastId: any, user): Promise<any> {
     const podcastObjectId = ObjectId.createFromHexString(podcastId)

@@ -54,6 +54,26 @@ export class AwsService {
     await this.podcastService.create(createPodcastDto, user, webpAndmp3Urls)
   }
 
+  async createEmptyPodcast(file, createEmptyPodcastDto, user) {
+    await this.s3.send(
+      new PutObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${createEmptyPodcastDto.name}/${file.originalname}`,
+        Body: file.buffer,
+      }),
+    )
+
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${createEmptyPodcastDto.name}/${file.originalname}`,
+      }),
+    )
+
+    await this.podcastService.createEmptyPodcast(createEmptyPodcastDto, user, url)
+  }
+
   async delete(fileName: string, folderName: string): Promise<void> {
     // list files in specific folder
 
