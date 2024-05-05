@@ -14,9 +14,13 @@ export class PodcastController {
     return await this.podcastService.fetchTrtData()
   }
 
-  @Get()
+  @Get('withEpisode')
   findAll() {
     return this.podcastService.findAll()
+  }
+  @Get()
+  findMainPage() {
+    return this.podcastService.findMainPage()
   }
 
   @Patch(':id')
