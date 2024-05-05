@@ -15,8 +15,12 @@ export class PodcastController {
   }
 
   @Get()
-  findAll() {
+  findAll("main") {
     return this.podcastService.findAll()
+  }
+  @Get()
+  findMainPage() {
+    return this.podcastService.findMainPage()
   }
 
   @Patch(':id')
