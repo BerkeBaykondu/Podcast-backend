@@ -19,11 +19,6 @@ export class PodcastController {
     return this.podcastService.findAll()
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.podcastService.findOne(+id)
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePodcastDto: UpdatePodcastDto) {
     return this.podcastService.update(+id, updatePodcastDto)
