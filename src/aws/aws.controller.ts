@@ -18,6 +18,7 @@ import { TypedBody, TypedRoute } from '@nestia/core'
 import { IPodcast } from 'src/podcast/interface/podcast.interface'
 import { PodcastService } from 'src/podcast/podcast.service'
 import { FileTypePipe } from '../core/pipe/upload.pipe'
+import { IEpisode } from '../episode/interface/episode.interface'
 
 @Controller('aws')
 export class AwsController {
@@ -55,15 +56,23 @@ export class AwsController {
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
 
-  @Post('addEpisode')
+  @Post('addEpisode/:id')
   @UseInterceptors(FileInterceptor('file'))
   async createEpisode(
-    @UploadedFile()
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+      }),
+    )
     file: Express.Multer.File,
     @Body()
-    createEmptyPodcastDto: IPodcast.IUploadPodcast,
+    createEmptyPodcastDto: IEpisode.IAddEpisode,
     @Req() req,
-  ) {}
+    @Param('id') id,
+  ) {
+    req.user = '313131313'
+    return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, id)
+  }
 
   @Delete(':podcastId')
   async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {

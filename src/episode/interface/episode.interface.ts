@@ -8,3 +8,11 @@ export interface IEpisode {
   createdAt?: any
   updatedAt?: any
 }
+
+export namespace IEpisode {
+  export interface IAddEpisode {
+    episodeName: string
+    episodeDescription: string
+    podcastName: string
+  }
+}

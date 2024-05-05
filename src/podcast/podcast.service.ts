@@ -136,8 +136,12 @@ export class PodcastService {
     return `data:image/webp;base64,${base64}`
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} podcast`
+  async findOneAndUpdate(condition, update, options?) {
+    return this.podcastModel.findOneAndUpdate(condition, update, options).lean()
+  }
+
+  async findOne(condition) {
+    return this.podcastModel.findOne(condition).lean()
   }
 
   update(id: number, updatePodcastDto: UpdatePodcastDto) {

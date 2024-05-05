@@ -9,13 +9,17 @@ import {
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable } from '@nestjs/common'
-import { PodcastService } from 'src/podcast/podcast.service'
+import { EpisodeService } from '../episode/episode.service'
+import { PodcastService } from '../podcast/podcast.service'
 
 @Injectable()
 export class AwsService {
   private s3: S3Client
 
-  constructor(private readonly podcastService: PodcastService) {
+  constructor(
+    private readonly podcastService: PodcastService,
+    private readonly episodeService: EpisodeService,
+  ) {
     this.s3 = new S3Client({
       region: process.env.BUCKETREGION!,
       credentials: {
@@ -71,7 +75,26 @@ export class AwsService {
       }),
     )
 
-    await this.podcastService.createEmptyPodcast(createEmptyPodcastDto, user, url)
+    return await this.podcastService.createEmptyPodcast(createEmptyPodcastDto, user, url)
+  }
+
+  async addEpisode(file, dto, user, id) {
+    await this.s3.send(
+      new PutObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${dto.podcastName}/${file.originalname}`,
+        Body: file.buffer,
+      }),
+    )
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${dto.podcastName}/${file.originalname}`,
+      }),
+    )
+
+    await this.episodeService.addEpisode(dto, user, url, id)
   }
 
   async delete(fileName: string, folderName: string): Promise<void> {
