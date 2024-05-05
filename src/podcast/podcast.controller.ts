@@ -14,8 +14,8 @@ export class PodcastController {
     return await this.podcastService.fetchTrtData()
   }
 
-  @Get()
-  findAll("main") {
+  @Get('withEpisode')
+  findAll() {
     return this.podcastService.findAll()
   }
   @Get()
