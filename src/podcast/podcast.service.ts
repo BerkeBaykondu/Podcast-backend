@@ -15,7 +15,7 @@ export class PodcastService {
     @InjectModel(Podcast.name) private podcastModel: Model<PodcastDocument>,
     private readonly userService: UserService,
   ) {}
-  async create(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls): Promise<any> {
+  async createPodcastWithFirstEpisode(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls, id): Promise<any> {
     const firstEpisode: IEpisode = {
       name: createPodcastDto.episodeName,
       description: createPodcastDto.episodeDescription,
@@ -24,7 +24,8 @@ export class PodcastService {
       totalLike: 0,
     }
 
-    const newPodcast: Podcast = {
+    const newPodcast: IPodcast = {
+      _id: id,
       name: createPodcastDto.podcastName,
       category: createPodcastDto.podcastCategory,
       description: createPodcastDto.podcastDescription,
@@ -36,25 +37,29 @@ export class PodcastService {
     const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
-  async createEmptyPodcast(createEmptyPodcastDto, user, url) {
-    const newPodcast: Podcast = {
-      name: createEmptyPodcastDto.name,
-      category: createEmptyPodcastDto.category,
-      description: createEmptyPodcastDto.description,
+  async createEmptyPodcast(createEmptyPodcastDto, user, url, id) {
+    const newPodcast: IPodcast = {
+      _id: id,
+      name: createEmptyPodcastDto.podcastName,
+      category: createEmptyPodcastDto.podcastCategory,
+      description: createEmptyPodcastDto.podcastDescription,
       episodes: [],
       imageUrl: url,
       totalLike: 0,
       owner: user,
     }
-    console.log(newPodcast)
     const podcast = await this.podcastModel.create(newPodcast)
     return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
   }
 
-  async delete(podcastId: any, user): Promise<any> {
+  async deletePodcast(podcastId: any, user_id): Promise<any> {
     const podcastObjectId = ObjectId.createFromHexString(podcastId)
     await this.podcastModel.deleteOne({ _id: podcastObjectId })
-    const updatedUser = await this.userService.findOneAndUpdate({ user_id: user }, { $pull: { createdPodcastList: podcastObjectId } }, { new: true })
+    const updatedUser = await this.userService.findOneAndUpdate(
+      { user_id: user_id },
+      { $pull: { createdPodcastList: podcastObjectId } },
+      { new: true },
+    )
     return updatedUser
   }
 
