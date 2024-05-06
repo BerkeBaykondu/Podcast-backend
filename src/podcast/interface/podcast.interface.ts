@@ -4,21 +4,18 @@ export interface IPodcast {
   description: string
   category: string
   imageUrl: string
-  audioUrl: string
+  episodes: any
+  totalLike: number
+  owner: string
   createdAt?: any
   updatedAt?: any
 }
 
 export namespace IPodcast {
   export interface IUploadPodcast {
-    name: string
-    category: string
-    description: string
-  }
-
-  export interface IDeletePodcast {
-    fileName: string
-    folderName: string
+    podastName: string
+    podcastCategory: string
+    podcastDescription: string
   }
 
   export interface ICreatePodcastWithFirstEpisode {

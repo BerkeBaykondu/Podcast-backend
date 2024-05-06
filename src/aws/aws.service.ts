@@ -11,6 +11,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable } from '@nestjs/common'
 import { EpisodeService } from '../episode/episode.service'
 import { PodcastService } from '../podcast/podcast.service'
+import { ObjectId } from 'mongodb'
 
 @Injectable()
 export class AwsService {
@@ -30,6 +31,8 @@ export class AwsService {
   }
   async createPodcastWithFirstEpisode(files, createPodcastDto, user): Promise<any> {
     let webpAndmp3Urls: string[] = []
+    const id = new ObjectId().toHexString()
+    const time = Date.now()
     const uploadAndGetUrlPromises = files.map(async (file, index) => {
       // const keyPrefix =
       //   index === 0
@@ -38,7 +41,7 @@ export class AwsService {
       await this.s3.send(
         new PutObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `${user}/${createPodcastDto.podcastName}/${file.originalname}`,
+          Key: `${user}/${id}/${file.originalname}_${time}`,
           Body: file.buffer,
         }),
       )
@@ -46,7 +49,7 @@ export class AwsService {
         this.s3,
         new GetObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `${user}/${createPodcastDto.podcastName}/${file.originalname}`,
+          Key: `${user}/${id}/${file.originalname}_${time}`,
         }),
       )
       webpAndmp3Urls.push(url)
@@ -55,14 +58,17 @@ export class AwsService {
 
     await Promise.all(uploadAndGetUrlPromises)
 
-    await this.podcastService.create(createPodcastDto, user, webpAndmp3Urls)
+    await this.podcastService.createPodcastWithFirstEpisode(createPodcastDto, user, webpAndmp3Urls, id)
   }
 
   async createEmptyPodcast(file, createEmptyPodcastDto, user) {
+    const id = new ObjectId().toHexString()
+    const time = Date.now()
+
     await this.s3.send(
       new PutObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${createEmptyPodcastDto.name}/${file.originalname}`,
+        Key: `${user}/${id}/${file.originalname}_${time}`,
         Body: file.buffer,
       }),
     )
@@ -71,18 +77,18 @@ export class AwsService {
       this.s3,
       new GetObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${createEmptyPodcastDto.name}/${file.originalname}`,
+        Key: `${user}/${id}/${file.originalname}_${time}`,
       }),
     )
 
-    return await this.podcastService.createEmptyPodcast(createEmptyPodcastDto, user, url)
+    return await this.podcastService.createEmptyPodcast(createEmptyPodcastDto, user, url, id)
   }
 
   async addEpisode(file, dto, user, id) {
     await this.s3.send(
       new PutObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${dto.podcastName}/${file.originalname}`,
+        Key: `${user}/${id}/${file.originalname}`,
         Body: file.buffer,
       }),
     )
@@ -90,20 +96,21 @@ export class AwsService {
       this.s3,
       new GetObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${dto.podcastName}/${file.originalname}`,
+        Key: `${user}/${id}/${file.originalname}`,
       }),
     )
 
     await this.episodeService.addEpisode(dto, user, url, id)
   }
 
-  async delete(fileName: string, folderName: string): Promise<void> {
+  async deletePodcast(user, podcastId): Promise<void> {
     // list files in specific folder
+    console.log(podcastId)
 
     const filesInFolder = await this.s3.send(
       new ListObjectsV2Command({
         Bucket: process.env.BUCKETNAME,
-        Prefix: `${folderName}/`,
+        Prefix: `${user}/${podcastId}/`,
       }),
     )
 
@@ -123,7 +130,7 @@ export class AwsService {
     await this.s3.send(
       new DeleteObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${folderName}`,
+        Key: `${user}/${podcastId}`,
       }),
     )
   }

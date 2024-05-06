@@ -17,11 +17,10 @@ export class EpisodeService {
 
   async addEpisode(dto, user, url, id) {
     const podcast = await this.podcastService.findOne({ _id: id })
-    console.log(dto)
     const firstEpisode: IEpisode = {
       name: dto.episodeName,
       description: dto.episodeDescription,
-      imageUrl: podcast!.imageUrl,
+      imageUrl: podcast!.imageUrl, // bu satır yüzünden ekstra sorgu yapıyorum amk!!
       audioUrl: url,
       totalLike: 0,
     }

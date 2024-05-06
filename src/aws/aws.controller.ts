@@ -56,7 +56,7 @@ export class AwsController {
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
 
-  @Post('addEpisode/:id')
+  @Post('addEpisode/:podcastId')
   @UseInterceptors(FileInterceptor('file'))
   async createEpisode(
     @UploadedFile(
@@ -68,18 +68,15 @@ export class AwsController {
     @Body()
     createEmptyPodcastDto: IEpisode.IAddEpisode,
     @Req() req,
-    @Param('id') id,
+    @Param('podcastId') podcastId,
   ) {
     req.user = '313131313'
-    return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, id)
+    return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, podcastId)
   }
 
   @Delete(':podcastId')
-  async deleteFile(@Body() deletePodcastDto: IPodcast.IDeletePodcast, @Param('podcastId') podcastId, @Req() req) {
+  async deleteFile(@Param('podcastId') podcastId, @Req() req) {
     req.user = '313131313'
-    await Promise.allSettled([
-      this.awsService.delete(deletePodcastDto.fileName, deletePodcastDto.folderName),
-      this.podcastService.delete(podcastId, req.user),
-    ])
+    await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
   }
 }
