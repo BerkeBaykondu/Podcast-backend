@@ -6,9 +6,9 @@ export type PortfolioDocument = HydratedDocument<User>
 export class User {
   @Prop({ unique: true, required: true, index: true })
   user_id: string
-  @Prop()
+  @Prop({ default: false })
   isPremium: Boolean
-  @Prop({ maxlength: 150 })
+  @Prop({ maxlength: 150, default: '' })
   description: string
 
   // Podcast Etkileşimleri
