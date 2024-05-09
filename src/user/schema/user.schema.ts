@@ -4,7 +4,7 @@ export type PortfolioDocument = HydratedDocument<User>
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ unique: true, required: true, index: true })
+  @Prop({ unique: true, index: true })
   user_id: string
   @Prop({ default: false })
   isPremium: Boolean
