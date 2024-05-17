@@ -63,6 +63,10 @@ export class PodcastService {
     return updatedUser
   }
 
+  async findPodcastByUser(id) {
+    return await this.podcastModel.find({ owner: id })
+  }
+
   async findAll() {
     return await this.podcastModel.find()
   }

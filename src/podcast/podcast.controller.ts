@@ -14,6 +14,11 @@ export class PodcastController {
     return await this.podcastService.fetchTrtData()
   }
 
+  @Get('userProfile/:id')
+  async findPodcastByUser(id: String) {
+    return await this.podcastService.findPodcastByUser(id)
+  }
+
   @Get('withEpisode')
   findAll() {
     return this.podcastService.findAll()
