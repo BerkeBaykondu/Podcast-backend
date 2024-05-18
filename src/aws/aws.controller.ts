@@ -65,7 +65,7 @@ export class AwsController {
     @UploadedFile()
     file: Express.Multer.File,
   ) {
-    console.log(file)
+    console.log('file=>>>>>', file)
     return file
   }
 
