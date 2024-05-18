@@ -153,11 +153,23 @@ export class PodcastService {
     return this.podcastModel.findOne(condition).lean()
   }
 
-  update(id: number, updatePodcastDto: UpdatePodcastDto) {
-    return `This action updates a #${id} podcast`
+  // User Podcast Interactions
+  async likePodcast(id, podcastId) {
+    return await this.userService.findOneAndUpdate({ user_id: id }, { $push: { likedPodcastList: podcastId } }, { new: true })
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} podcast`
+  async removeLikedPodcast(id, podcastId) {
+    return await this.userService.findOneAndUpdate({ user_id: id }, { $pull: { likedPodcastList: podcastId } }, { new: true })
+  }
+  async pinPodcast(id, podcastId) {
+    return await this.userService.findOneAndUpdate({ user_id: id }, { $push: { pinnedPodcastList: podcastId } }, { new: true })
+  }
+  async removePinnedPodcast(id, podcastId) {
+    return await this.userService.findOneAndUpdate({ user_id: id }, { $pull: { pinnedPodcastList: podcastId } }, { new: true })
+  }
+  async archivePodcast(id, podcastId) {
+    return await this.userService.findOneAndUpdate({ user_id: id }, { $push: { archivedPodcastList: podcastId } }, { new: true })
+  }
+  async removeArchivedPodcast(id, podcastId) {
+    return await this.userService.findOneAndUpdate({ user_id: id }, { $pull: { archivedPodcastList: podcastId } }, { new: true })
   }
 }

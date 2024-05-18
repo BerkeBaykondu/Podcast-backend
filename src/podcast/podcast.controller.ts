@@ -32,13 +32,29 @@ export class PodcastController {
     return this.podcastService.findMainPage()
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePodcastDto: UpdatePodcastDto) {
-    return this.podcastService.update(+id, updatePodcastDto)
+  // user podcast interactions
+  @Post('like/:podcastId')
+  likePodcast(@Param('podcastId') podcastId: string, @Req() req) {
+    return this.podcastService.likePodcast(req.user, podcastId)
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.podcastService.remove(+id)
+  @Post('removeLike/:podcastId')
+  removeLikedPodcast(@Param('podcastId') podcastId: string, @Req() req) {
+    return this.podcastService.removeLikedPodcast(req.user, podcastId)
+  }
+  @Post('pin/:podcastId')
+  pinPodcast(@Param('podcastId') podcastId: string, @Req() req) {
+    return this.podcastService.pinPodcast(req.user, podcastId)
+  }
+  @Post('removePin/:podcastId')
+  removePinnedPodcast(@Param('podcastId') podcastId: string, @Req() req) {
+    return this.podcastService.removePinnedPodcast(req.user, podcastId)
+  }
+  @Post('archive/:pdocastId')
+  archivePodcast(@Param('podcastId') podcastId: string, @Req() req) {
+    return this.podcastService.archivePodcast(req.user, podcastId)
+  }
+  @Post('removeArchive/podcastId')
+  removeArchivedPodcast(@Param('podcastId') podcastId: string, @Req() req) {
+    return this.podcastService.removeArchivedPodcast(req.user, podcastId)
   }
 }
