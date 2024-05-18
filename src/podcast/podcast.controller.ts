@@ -4,7 +4,7 @@ import { PodcastService } from './podcast.service'
 import { UpdatePodcastDto } from './interface/update-podcast.dto'
 import { IPodcast } from './interface/podcast.interface'
 import { TypedBody, TypedRoute } from '@nestia/core'
-import { AuthGuard } from 'src/core/guard/auth.guard'
+import { AuthGuard } from '../core/guard/auth.guard'
 
 @Controller('podcast')
 @UseGuards(AuthGuard)
