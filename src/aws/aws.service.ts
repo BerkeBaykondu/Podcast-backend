@@ -134,4 +134,6 @@ export class AwsService {
       }),
     )
   }
+
+  async deleteEpisode(user, podcastId, episodeId) {}
 }

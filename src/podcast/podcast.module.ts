@@ -8,6 +8,7 @@ import { UserService } from 'src/user/user.service'
 import { User, userSchema } from 'src/user/schema/user.schema'
 import { EpisodeService } from '../episode/episode.service'
 import { Episode, episodeSchema } from '../episode/schema/episode.schema'
+import { JwtService } from '@nestjs/jwt'
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { Episode, episodeSchema } from '../episode/schema/episode.schema'
     MongooseModule.forFeature([{ name: Episode.name, schema: episodeSchema }]),
   ],
   controllers: [PodcastController],
-  providers: [PodcastService, AwsService, UserService, EpisodeService],
+  providers: [PodcastService, AwsService, UserService, EpisodeService, JwtService],
 })
 export class PodcastModule {}

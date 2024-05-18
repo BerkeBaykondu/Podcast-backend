@@ -10,6 +10,7 @@ import {
   Req,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
 import { AwsService } from './aws.service'
@@ -19,8 +20,10 @@ import { IPodcast } from 'src/podcast/interface/podcast.interface'
 import { PodcastService } from 'src/podcast/podcast.service'
 import { FileTypePipe } from '../core/pipe/upload.pipe'
 import { IEpisode } from '../episode/interface/episode.interface'
+import { AuthGuard } from 'src/core/guard/auth.guard'
 
 @Controller('aws')
+@UseGuards(AuthGuard)
 export class AwsController {
   constructor(
     private readonly awsService: AwsService,
@@ -35,7 +38,7 @@ export class AwsController {
     createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode,
     @Req() req,
   ) {
-    req.user = '313131313'
+    console.log(req)
     return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
   }
 
@@ -52,7 +55,6 @@ export class AwsController {
     createEmptyPodcastDto: IPodcast.IUploadPodcast,
     @Req() req,
   ) {
-    req.user = '313131313'
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
 
@@ -70,13 +72,11 @@ export class AwsController {
     @Req() req,
     @Param('podcastId') podcastId,
   ) {
-    req.user = '313131313'
     return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, podcastId)
   }
 
   @Delete(':podcastId')
   async deleteFile(@Param('podcastId') podcastId, @Req() req) {
-    req.user = '313131313'
     await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
   }
 }
