@@ -45,11 +45,7 @@ export class AwsController {
   @Post('emptyPodcast')
   @UseInterceptors(FileInterceptor('file'))
   async createEmptyPodcast(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'image/webp' })],
-      }),
-    )
+    @UploadedFile()
     file: Express.Multer.File,
     @Body()
     createEmptyPodcastDto: IPodcast.IUploadPodcast,
