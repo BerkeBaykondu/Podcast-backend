@@ -59,7 +59,7 @@ export class AwsController {
   @UseInterceptors(FileInterceptor('file'))
   async deneme(
     @UploadedFile()
-    file: Express.Multer.File,
+    file: any,
   ) {
     console.log('file=>>>>>', file)
     return file
