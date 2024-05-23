@@ -13,6 +13,5 @@ export namespace IEpisode {
   export interface IAddEpisode {
     episodeName: string
     episodeDescription: string
-    podcastName: string
   }
 }

@@ -13,6 +13,11 @@ export class UserController {
     return this.userService.create(createUserDto)
   }
 
+  @Get('profile/:id')
+  async findPodcastByUser(@Param('id') id: string) {
+    return await this.userService.findPodcastByUser(id)
+  }
+
   @Get()
   findAll() {
     return this.userService.findAll()

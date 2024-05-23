@@ -105,7 +105,6 @@ export class AwsService {
 
   async deletePodcast(user, podcastId): Promise<void> {
     // list files in specific folder
-    console.log(podcastId)
 
     const filesInFolder = await this.s3.send(
       new ListObjectsV2Command({

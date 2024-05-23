@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { IPodcast } from './interface/podcast.interface'
 import { UpdatePodcastDto } from './interface/update-podcast.dto'
 import { InjectModel } from '@nestjs/mongoose'
@@ -13,7 +13,7 @@ import { IEpisode } from '../episode/interface/episode.interface'
 export class PodcastService {
   constructor(
     @InjectModel(Podcast.name) private podcastModel: Model<PodcastDocument>,
-    private readonly userService: UserService,
+    @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
   ) {}
   async createPodcastWithFirstEpisode(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls, id): Promise<any> {
     const firstEpisode: IEpisode = {
@@ -61,10 +61,6 @@ export class PodcastService {
       { new: true },
     )
     return updatedUser
-  }
-
-  async findPodcastByUser(id) {
-    return await this.podcastModel.find({ owner: id })
   }
 
   async findAll() {

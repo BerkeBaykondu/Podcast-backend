@@ -18,10 +18,6 @@ export class PodcastController {
   }
 
   // Bir kullanıcının bütün podcastleri
-  @Get('userProfile/:id')
-  async findPodcastByUser(@Param('id') id: string) {
-    return await this.podcastService.findPodcastByUser(id)
-  }
 
   @Get('withEpisode')
   findAll() {

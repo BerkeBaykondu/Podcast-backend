@@ -51,7 +51,6 @@ export class AwsController {
     createEmptyPodcastDto: IPodcast.IUploadPodcast,
     @Req() req,
   ) {
-    console.log(file)
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
 
@@ -68,10 +67,11 @@ export class AwsController {
   @Post('addEpisode/:podcastId')
   @UseInterceptors(FileInterceptor('file'))
   async createEpisode(
-    @UploadedFile()
-    // new ParseFilePipe({
-    //   validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
-    // }),
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+      }),
+    )
     file: Express.Multer.File,
     @Body()
     createEmptyPodcastDto: IEpisode.IAddEpisode,
