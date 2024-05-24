@@ -131,5 +131,13 @@ export class AwsService {
     )
   }
 
-  async deleteEpisode(user, episodeId) {}
+  async deleteEpisode(user, episodeId, podcastId) {
+    await this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${episodeId}`,
+      }),
+    )
+    await this.episodeService.deleteEpisode(user, episodeId, podcastId)
+  }
 }

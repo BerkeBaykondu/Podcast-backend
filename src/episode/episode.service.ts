@@ -29,7 +29,9 @@ export class EpisodeService {
     return await this.podcastService.findOneAndUpdate({ _id: id }, { $push: { episodes: firstEpisode } }, { new: true })
   }
 
-  async deleteEpisode(user, episodeId) {}
+  async deleteEpisode(user, episodeId, podcastId) {
+    return await this.podcastService.findOneAndUpdate({ _id: podcastId }, { $pull: { episodes: { _id: episodeId } } }, { new: true })
+  }
 
   findAll() {
     return `This action returns all episode`

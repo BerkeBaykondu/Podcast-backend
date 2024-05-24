@@ -85,8 +85,8 @@ export class AwsController {
     await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
   }
 
-  @Delete(':episodeId')
-  async deleteEpisode(@Param('episodeId') episodeId, @Req() req) {
-    return await this.awsService.deleteEpisode(req.user, episodeId)
+  @Delete('deleteEpisode/:podcastId/:episodeId')
+  async deleteEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req) {
+    return await this.awsService.deleteEpisode(req.user, episodeId, podcastId)
   }
 }
