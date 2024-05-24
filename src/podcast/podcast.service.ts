@@ -15,8 +15,9 @@ export class PodcastService {
     @InjectModel(Podcast.name) private podcastModel: Model<PodcastDocument>,
     @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
   ) {}
-  async createPodcastWithFirstEpisode(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls, id): Promise<any> {
+  async createPodcastWithFirstEpisode(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls, id, episodeId): Promise<any> {
     const firstEpisode: IEpisode = {
+      _id: episodeId,
       name: createPodcastDto.episodeName,
       description: createPodcastDto.episodeDescription,
       imageUrl: urls[0],

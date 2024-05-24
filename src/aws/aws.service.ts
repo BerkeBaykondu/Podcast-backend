@@ -32,16 +32,14 @@ export class AwsService {
   async createPodcastWithFirstEpisode(files, createPodcastDto, user): Promise<any> {
     let webpAndmp3Urls: string[] = []
     const id = new ObjectId().toHexString()
+    const episodeId = new ObjectId().toHexString()
     const time = Date.now()
     const uploadAndGetUrlPromises = files.map(async (file, index) => {
-      // const keyPrefix =
-      //   index === 0
-      // ? `${user}/${createPodcastDto.podcastName}/${file.originalname}`
-      // : `${user}/${createPodcastDto.podcastName}/${createPodcastDto.episodeName}/${file.originalname}`
+      const keyPrefix = index === 0 ? `${user}/${id}/${id}` : `${user}/${id}/${episodeId}`
       await this.s3.send(
         new PutObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `${user}/${id}/${file.originalname}_${time}`,
+          Key: keyPrefix,
           Body: file.buffer,
         }),
       )
@@ -49,7 +47,7 @@ export class AwsService {
         this.s3,
         new GetObjectCommand({
           Bucket: process.env.BUCKETNAME,
-          Key: `${user}/${id}/${file.originalname}_${time}`,
+          Key: keyPrefix,
         }),
       )
       webpAndmp3Urls.push(url)
@@ -58,7 +56,7 @@ export class AwsService {
 
     await Promise.all(uploadAndGetUrlPromises)
 
-    await this.podcastService.createPodcastWithFirstEpisode(createPodcastDto, user, webpAndmp3Urls, id)
+    await this.podcastService.createPodcastWithFirstEpisode(createPodcastDto, user, webpAndmp3Urls, id, episodeId)
   }
 
   async createEmptyPodcast(file, createEmptyPodcastDto, user) {
@@ -134,5 +132,5 @@ export class AwsService {
     )
   }
 
-  async deleteEpisode(user, podcastId, episodeId) {}
+  async deleteEpisode(user, episodeId) {}
 }

@@ -28,6 +28,8 @@ export class EpisodeService {
     return await this.podcastService.findOneAndUpdate({ _id: id }, { $push: { episodes: firstEpisode } }, { new: true })
   }
 
+  async deleteEpisode(user, episodeId) {}
+
   findAll() {
     return `This action returns all episode`
   }

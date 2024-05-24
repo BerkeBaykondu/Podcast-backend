@@ -38,7 +38,6 @@ export class AwsController {
     createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode,
     @Req() req,
   ) {
-    console.log(req)
     return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
   }
 
@@ -84,5 +83,10 @@ export class AwsController {
   @Delete(':podcastId')
   async deleteFile(@Param('podcastId') podcastId, @Req() req) {
     await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
+  }
+
+  @Delete(':episodeId')
+  async deleteEpisode(@Param('episodeId') episodeId, @Req() req) {
+    return await this.awsService.deleteEpisode(req.user, episodeId)
   }
 }
