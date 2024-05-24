@@ -33,7 +33,6 @@ export class AwsService {
     let webpAndmp3Urls: string[] = []
     const id = new ObjectId().toHexString()
     const episodeId = new ObjectId().toHexString()
-    const time = Date.now()
     const uploadAndGetUrlPromises = files.map(async (file, index) => {
       const keyPrefix = index === 0 ? `${user}/${id}/${id}` : `${user}/${id}/${episodeId}`
       await this.s3.send(
@@ -61,12 +60,11 @@ export class AwsService {
 
   async createEmptyPodcast(file, createEmptyPodcastDto, user) {
     const id = new ObjectId().toHexString()
-    const time = Date.now()
 
     await this.s3.send(
       new PutObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${id}/${file.originalname}_${time}`,
+        Key: `${user}/${id}/${id}`,
         Body: file.buffer,
       }),
     )
@@ -75,7 +73,7 @@ export class AwsService {
       this.s3,
       new GetObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${id}/${file.originalname}_${time}`,
+        Key: `${user}/${id}/${id}`,
       }),
     )
 
@@ -83,10 +81,11 @@ export class AwsService {
   }
 
   async addEpisode(file, dto, user, id) {
+    const episodeId = new ObjectId().toHexString()
     await this.s3.send(
       new PutObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${id}/${file.originalname}`,
+        Key: `${user}/${id}/${episodeId}`,
         Body: file.buffer,
       }),
     )
@@ -94,11 +93,11 @@ export class AwsService {
       this.s3,
       new GetObjectCommand({
         Bucket: process.env.BUCKETNAME,
-        Key: `${user}/${id}/${file.originalname}`,
+        Key: `${user}/${id}/${episodeId}`,
       }),
     )
 
-    await this.episodeService.addEpisode(dto, user, url, id)
+    await this.episodeService.addEpisode(dto, user, url, id, episodeId)
   }
 
   async deletePodcast(user, podcastId): Promise<void> {

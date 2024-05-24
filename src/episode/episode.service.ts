@@ -15,9 +15,10 @@ export class EpisodeService {
     return 'This action adds a new episode'
   }
 
-  async addEpisode(dto, user, url, id) {
+  async addEpisode(dto, user, url, id, episodeId) {
     const podcast = await this.podcastService.findOne({ _id: id })
     const firstEpisode: IEpisode = {
+      _id: episodeId,
       name: dto.episodeName,
       description: dto.episodeDescription,
       imageUrl: podcast!.imageUrl, // bu satır yüzünden ekstra sorgu yapıyorum amk!!
