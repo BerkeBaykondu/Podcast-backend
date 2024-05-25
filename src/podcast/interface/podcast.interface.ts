@@ -1,6 +1,6 @@
 export interface IPodcast {
   _id?: any
-  name: string
+  title: string
   description: string
   category: string
   imageUrl: string
@@ -13,16 +13,16 @@ export interface IPodcast {
 
 export namespace IPodcast {
   export interface IUploadPodcast {
-    podastName: string
+    podastTitle: string
     podcastCategory: string
     podcastDescription: string
   }
 
   export interface ICreatePodcastWithFirstEpisode {
-    podcastName: string
+    podcastTitle: string
     podcastDescription: string
     podcastCategory: Category
-    episodeName: string
+    episodeTitle: string
     episodeDescription: string
   }
 }

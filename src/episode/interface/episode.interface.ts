@@ -1,6 +1,6 @@
 export interface IEpisode {
   _id?: any
-  name: string
+  title: string
   description: string
   imageUrl: string
   audioUrl: string
@@ -11,11 +11,11 @@ export interface IEpisode {
 
 export namespace IEpisode {
   export interface IAddEpisode {
-    episodeName: string
+    episodeTitle: string
     episodeDescription: string
   }
   export interface IUpdateEpisode {
-    episodeName: string
+    episodeTitle: string
     episodeDescription: string
   }
 }

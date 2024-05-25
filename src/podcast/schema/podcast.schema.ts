@@ -6,7 +6,7 @@ export type PodcastDocument = HydratedDocument<Podcast>
 @Schema({ timestamps: true })
 export class Podcast {
   @Prop({ sparse: true, index: { unique: true, sparse: true } })
-  name: string
+  title: string
   @Prop({ maxlength: 150 })
   description: string
   @Prop({})

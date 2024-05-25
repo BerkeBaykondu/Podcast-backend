@@ -19,7 +19,7 @@ export class EpisodeService {
     const podcast = await this.podcastService.findOne({ _id: id })
     const firstEpisode: IEpisode = {
       _id: episodeId,
-      name: dto.episodeName,
+      title: dto.episodeTitle,
       description: dto.episodeDescription,
       imageUrl: podcast!.imageUrl, // bu satır yüzünden ekstra sorgu yapıyorum amk!!
       audioUrl: url,

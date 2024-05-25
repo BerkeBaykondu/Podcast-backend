@@ -18,7 +18,7 @@ export class PodcastService {
   async createPodcastWithFirstEpisode(createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode, user, urls, id, episodeId): Promise<any> {
     const firstEpisode: IEpisode = {
       _id: episodeId,
-      name: createPodcastDto.episodeName,
+      title: createPodcastDto.episodeTitle,
       description: createPodcastDto.episodeDescription,
       imageUrl: urls[0],
       audioUrl: urls[1],
@@ -27,7 +27,7 @@ export class PodcastService {
 
     const newPodcast: IPodcast = {
       _id: id,
-      name: createPodcastDto.podcastName,
+      title: createPodcastDto.podcastTitle,
       category: createPodcastDto.podcastCategory,
       description: createPodcastDto.podcastDescription,
       episodes: [firstEpisode],
@@ -41,7 +41,7 @@ export class PodcastService {
   async createEmptyPodcast(createEmptyPodcastDto, user, url, id) {
     const newPodcast: IPodcast = {
       _id: id,
-      name: createEmptyPodcastDto.podcastName,
+      title: createEmptyPodcastDto.podcastTitle,
       category: createEmptyPodcastDto.podcastCategory,
       description: createEmptyPodcastDto.podcastDescription,
       episodes: [],
