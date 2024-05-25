@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import mongoose, { HydratedDocument, Types } from 'mongoose'
 import { Episode } from '../../episode/schema/episode.schema'
+import { Category } from '../interface/podcast.interface'
 
 export type PodcastDocument = HydratedDocument<Podcast>
 @Schema({ timestamps: true })
@@ -10,7 +11,7 @@ export class Podcast {
   @Prop({ maxlength: 150 })
   description: string
   @Prop({})
-  category: string
+  category: Category[]
   @Prop({})
   imageUrl: string
   @Prop({ default: 0 })

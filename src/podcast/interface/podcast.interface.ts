@@ -2,7 +2,7 @@ export interface IPodcast {
   _id?: any
   title: string
   description: string
-  category: string
+  category: Category[]
   imageUrl: string
   episodes: any
   totalLike: number
@@ -14,14 +14,14 @@ export interface IPodcast {
 export namespace IPodcast {
   export interface IUploadPodcast {
     podastTitle: string
-    podcastCategory: string
+    podcastCategory: Category[]
     podcastDescription: string
   }
 
   export interface ICreatePodcastWithFirstEpisode {
     podcastTitle: string
     podcastDescription: string
-    podcastCategory: Category
+    podcastCategory: Category[]
     episodeTitle: string
     episodeDescription: string
   }

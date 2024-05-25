@@ -42,7 +42,7 @@ export class PodcastService {
     const newPodcast: IPodcast = {
       _id: id,
       title: createEmptyPodcastDto.podcastTitle,
-      category: createEmptyPodcastDto.podcastCategory,
+      category: [createEmptyPodcastDto.podcastCategory],
       description: createEmptyPodcastDto.podcastDescription,
       episodes: [],
       imageUrl: url,
