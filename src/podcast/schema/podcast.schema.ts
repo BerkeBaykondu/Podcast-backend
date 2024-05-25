@@ -11,7 +11,7 @@ export class Podcast {
   @Prop({ maxlength: 150 })
   description: string
   @Prop({})
-  category: Category[]
+  category: [Category]
   @Prop({})
   imageUrl: string
   @Prop({ default: 0 })
