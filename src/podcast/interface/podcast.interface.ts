@@ -2,7 +2,7 @@ export interface IPodcast {
   _id?: any
   title: string
   description: string
-  category: [Category]
+  category: any
   imageUrl: string
   episodes: any
   totalLike: number
@@ -14,20 +14,20 @@ export interface IPodcast {
 export namespace IPodcast {
   export interface IUploadPodcast {
     podastTitle: string
-    podcastCategory: [Category]
+    podcastCategory: Array<Category>
     podcastDescription: string
   }
 
   export interface ICreatePodcastWithFirstEpisode {
     podcastTitle: string
     podcastDescription: string
-    podcastCategory: [Category]
+    podcastCategory: Array<Category>
     episodeTitle: string
     episodeDescription: string
   }
 }
 
 export enum Category {
-  C1 = 'c1',
-  C2 = 'c2',
+  AileveSaglık = 'Aile ve Sağlık',
+  Teknoloji = 'Teknoloji',
 }

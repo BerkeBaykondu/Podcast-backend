@@ -1,5 +1,5 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common'
-import { IPodcast } from './interface/podcast.interface'
+import { Category, IPodcast } from './interface/podcast.interface'
 import { UpdatePodcastDto } from './interface/update-podcast.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { Podcast, PodcastDocument } from './schema/podcast.schema'
@@ -25,6 +25,8 @@ export class PodcastService {
       totalLike: 0,
     }
 
+    //createPodcastDto.podcastCategory = [Category.C1, Category.C2]
+    console.log(createPodcastDto.podcastCategory)
     const newPodcast: IPodcast = {
       _id: id,
       title: createPodcastDto.podcastTitle,
