@@ -29,6 +29,17 @@ export class EpisodeService {
     return await this.podcastService.findOneAndUpdate({ _id: id }, { $push: { episodes: firstEpisode } }, { new: true })
   }
 
+  async updateEpisode(episodeId, user, podcastId, url) {
+    return await this.podcastService.findOneAndUpdate({ owner: user, 'episodes._id': episodeId }, { $set: { 'episodes.$.audioUrl': url } })
+  }
+
+  async updateDataEpisode(episodeId, podcastId, user, updateEpisodeDto) {
+    return await this.podcastService.findOneAndUpdate(
+      { owner: user, 'episodes._id': episodeId },
+      { $set: { 'episodes.$.title': updateEpisodeDto.episodeTitle, 'episodes.$.description': updateEpisodeDto.episodeDescription } },
+    )
+  }
+
   async deleteEpisode(user, episodeId, podcastId) {
     return await this.podcastService.findOneAndUpdate({ _id: podcastId }, { $pull: { episodes: { _id: episodeId } } }, { new: true })
   }

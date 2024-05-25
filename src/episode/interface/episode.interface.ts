@@ -15,7 +15,7 @@ export namespace IEpisode {
     episodeDescription: string
   }
   export interface IUpdateEpisode {
-    episodeTitle: string
-    episodeDescription: string
+    episodeTitle?: string
+    episodeDescription?: string
   }
 }

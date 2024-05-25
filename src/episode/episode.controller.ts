@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common'
 import { EpisodeService } from './episode.service'
+import { IEpisode } from './interface/episode.interface'
 
 @Controller('episode')
 export class EpisodeController {
   constructor(private readonly episodeService: EpisodeService) {}
+
+  @Patch('episodeDescription/podcastId/episodeId')
+  async updateEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req, @Body() updateEpisodeDto: IEpisode.IUpdateEpisode) {}
 
   @Post()
   create() {

@@ -81,7 +81,7 @@ export class AwsController {
     return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, podcastId)
   }
 
-  @Delete(':podcastId')
+  @Delete('deletePodcast/:podcastId')
   async deleteFile(@Param('podcastId') podcastId, @Req() req) {
     return await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
   }
@@ -91,19 +91,20 @@ export class AwsController {
     return await this.awsService.deleteEpisode(req.user, episodeId, podcastId)
   }
 
+  // Update File
   @Patch('updateEpisode/:podcastId/:episodeId')
   @UseInterceptors(FileInterceptor('file'))
   async updateEpisode(
-    // @UploadedFile(
-    //   new ParseFilePipe({
-    //     validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
-    //   }),
-    // )
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+      }),
+    )
     file: Express.Multer.File,
     @Param('episodeId') episodeId,
     @Param('podcastId') podcastId,
     @Req() req,
   ) {
-    return await this.awsService.updateEpisode(file, req.user, episodeId, podcastId)
+    return await this.awsService.updateEpisodeFile(file, req.user, episodeId, podcastId)
   }
 }

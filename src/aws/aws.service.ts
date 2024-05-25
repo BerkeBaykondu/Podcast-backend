@@ -138,8 +138,34 @@ export class AwsService {
         Key: `${user}/${podcastId}/${episodeId}`,
       }),
     )
-    await this.episodeService.deleteEpisode(user, episodeId, podcastId)
+    return await this.episodeService.deleteEpisode(user, episodeId, podcastId)
   }
 
-  async updateEpisode(file, user, episodeId, podcasrId) {}
+  async updateEpisodeFile(file, user, episodeId, podcastId) {
+    await this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${episodeId}`,
+      }),
+    )
+    await this.s3.send(
+      new PutObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${episodeId}`,
+        Body: file.buffer,
+      }),
+    )
+
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${episodeId}`,
+      }),
+    )
+
+    return this.episodeService.updateEpisode(episodeId, user, podcastId, url)
+  }
+
+  async updatePodcastFile(file, userId, episodeId, podcastId) {}
 }
