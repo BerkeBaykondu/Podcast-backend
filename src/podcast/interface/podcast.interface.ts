@@ -2,7 +2,7 @@ export interface IPodcast {
   _id?: any
   title: string
   description: string
-  category: any
+  category: Array<any>
   imageUrl: string
   episodes: any
   totalLike: number
