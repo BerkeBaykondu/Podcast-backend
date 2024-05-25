@@ -48,6 +48,7 @@ export class AwsService {
           Bucket: process.env.BUCKETNAME,
           Key: keyPrefix,
         }),
+        { expiresIn: 99990909999999999999999000000 }, // URL expiration time in seconds (e.g., 1 hour)
       )
       webpAndmp3Urls.push(url)
       return url
