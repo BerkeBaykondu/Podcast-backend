@@ -25,7 +25,7 @@ export class UserService {
 
   async findPodcastByUser(id): Promise<any> {
     return await this.userModel
-      .findOne({ _id: id })
+      .findOne({ user_id: id })
       .populate({
         path: 'createdPodcastList',
         model: 'Podcast',

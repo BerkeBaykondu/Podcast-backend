@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseFilePipe,
+  Patch,
   Post,
   Req,
   UploadedFile,
@@ -88,5 +89,21 @@ export class AwsController {
   @Delete('deleteEpisode/:podcastId/:episodeId')
   async deleteEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req) {
     return await this.awsService.deleteEpisode(req.user, episodeId, podcastId)
+  }
+
+  @Patch('updateEpisode/:podcastId/:episodeId')
+  @UseInterceptors(FileInterceptor('file'))
+  async updateEpisode(
+    // @UploadedFile(
+    //   new ParseFilePipe({
+    //     validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+    //   }),
+    // )
+    file: Express.Multer.File,
+    @Param('episodeId') episodeId,
+    @Param('podcastId') podcastId,
+    @Req() req,
+  ) {
+    return await this.awsService.updateEpisode(file, req.user, episodeId, podcastId)
   }
 }

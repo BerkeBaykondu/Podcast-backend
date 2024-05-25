@@ -140,4 +140,6 @@ export class AwsService {
     )
     await this.episodeService.deleteEpisode(user, episodeId, podcastId)
   }
+
+  async updateEpisode(file, user, episodeId, podcasrId) {}
 }

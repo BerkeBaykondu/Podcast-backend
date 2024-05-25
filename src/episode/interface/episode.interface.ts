@@ -14,4 +14,8 @@ export namespace IEpisode {
     episodeName: string
     episodeDescription: string
   }
+  export interface IUpdateEpisode {
+    episodeName: string
+    episodeDescription: string
+  }
 }
