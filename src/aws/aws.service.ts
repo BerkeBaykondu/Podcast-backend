@@ -55,7 +55,7 @@ export class AwsService {
 
     await Promise.all(uploadAndGetUrlPromises)
 
-    await this.podcastService.createPodcastWithFirstEpisode(createPodcastDto, user, webpAndmp3Urls, id, episodeId)
+    return await this.podcastService.createPodcastWithFirstEpisode(createPodcastDto, user, webpAndmp3Urls, id, episodeId)
   }
 
   async createEmptyPodcast(file, createEmptyPodcastDto, user) {
@@ -97,7 +97,7 @@ export class AwsService {
       }),
     )
 
-    await this.episodeService.addEpisode(dto, user, url, id, episodeId)
+    return await this.episodeService.addEpisode(dto, user, url, id, episodeId)
   }
 
   async deletePodcast(user, podcastId): Promise<void> {
