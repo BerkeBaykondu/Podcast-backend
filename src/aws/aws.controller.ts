@@ -83,7 +83,7 @@ export class AwsController {
 
   @Delete(':podcastId')
   async deleteFile(@Param('podcastId') podcastId, @Req() req) {
-    await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
+    return await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
   }
 
   @Delete('deleteEpisode/:podcastId/:episodeId')
