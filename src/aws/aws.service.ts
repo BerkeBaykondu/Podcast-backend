@@ -48,6 +48,7 @@ export class AwsService {
           Bucket: process.env.BUCKETNAME,
           Key: keyPrefix,
         }),
+        { expiresIn: 360000 },
       )
       webpAndmp3Urls.push(url)
       return url
@@ -75,6 +76,7 @@ export class AwsService {
         Bucket: process.env.BUCKETNAME,
         Key: `${user}/${id}/${id}`,
       }),
+      { expiresIn: 360000 },
     )
 
     return await this.podcastService.createEmptyPodcast(createEmptyPodcastDto, user, url, id)
@@ -95,6 +97,7 @@ export class AwsService {
         Bucket: process.env.BUCKETNAME,
         Key: `${user}/${id}/${episodeId}`,
       }),
+      { expiresIn: 360000 },
     )
 
     return await this.episodeService.addEpisode(dto, user, url, id, episodeId)
@@ -162,6 +165,7 @@ export class AwsService {
         Bucket: process.env.BUCKETNAME,
         Key: `${user}/${podcastId}/${episodeId}`,
       }),
+      { expiresIn: 360000 },
     )
 
     return this.episodeService.updateEpisode(episodeId, user, podcastId, url)
