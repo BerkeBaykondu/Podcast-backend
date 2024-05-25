@@ -14,14 +14,14 @@ export interface IPodcast {
 export namespace IPodcast {
   export interface IUploadPodcast {
     podastTitle: string
-    podcastCategory: Array<Category>
+    podcastCategory: any
     podcastDescription: string
   }
 
   export interface ICreatePodcastWithFirstEpisode {
     podcastTitle: string
     podcastDescription: string
-    podcastCategory: Array<Category>
+    podcastCategory: any
     episodeTitle: string
     episodeDescription: string
   }

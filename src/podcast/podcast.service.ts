@@ -30,7 +30,7 @@ export class PodcastService {
     const newPodcast: IPodcast = {
       _id: id,
       title: createPodcastDto.podcastTitle,
-      category: createPodcastDto.podcastCategory,
+      category: [createPodcastDto.podcastCategory],
       description: createPodcastDto.podcastDescription,
       episodes: [firstEpisode],
       imageUrl: urls[0],
