@@ -10,7 +10,7 @@ export class Podcast {
   title: string
   @Prop({ maxlength: 150 })
   description: string
-  @Prop({})
+  @Prop({ type: [Category], required: true })
   category: [Category]
   @Prop({})
   imageUrl: string
