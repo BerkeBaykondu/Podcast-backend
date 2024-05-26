@@ -1,13 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common'
 import { EpisodeService } from './episode.service'
 import { IEpisode } from './interface/episode.interface'
+import { AuthGuard } from 'src/core/guard/auth.guard'
 
 @Controller('episode')
+@UseGuards(AuthGuard)
 export class EpisodeController {
   constructor(private readonly episodeService: EpisodeService) {}
 
-  @Patch('episodeDescription/podcastId/episodeId')
-  async updateEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req, @Body() updateEpisodeDto: IEpisode.IUpdateEpisode) {}
+  @Patch('updateData/:podcastId/:episodeId')
+  async updateEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req, @Body() updateEpisodeDto: IEpisode.IUpdateEpisode) {
+    return await this.episodeService.updateDataEpisode(episodeId, podcastId, req.user, updateEpisodeDto)
+  }
 
   @Post()
   create() {
