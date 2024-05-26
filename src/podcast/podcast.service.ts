@@ -25,8 +25,7 @@ export class PodcastService {
       totalLike: 0,
     }
 
-    //createPodcastDto.podcastCategory = [Category.C1, Category.C2]
-    console.log(createPodcastDto.podcastCategory)
+    createPodcastDto.podcastCategory = JSON.parse(createPodcastDto.podcastCategory)
     const newPodcast: IPodcast = {
       _id: id,
       title: createPodcastDto.podcastTitle,
@@ -41,12 +40,11 @@ export class PodcastService {
     return await this.podcastModel.create(newPodcast)
   }
   async createEmptyPodcast(createEmptyPodcastDto, user, url, id) {
-    // createEmptyPodcastDto.podcastCategory
-    createEmptyPodcastDto.podcastCategory = ['Tarih', 'Teknoloji']
+    createEmptyPodcastDto.podcastCategory = JSON.parse(createEmptyPodcastDto.podcastCategory)
     const newPodcast: IPodcast = {
       _id: id,
       title: createEmptyPodcastDto.podcastTitle,
-      category: [createEmptyPodcastDto.podcastCategory],
+      category: createEmptyPodcastDto.podcastCategory,
       description: createEmptyPodcastDto.podcastDescription,
       episodes: [],
       imageUrl: url,
