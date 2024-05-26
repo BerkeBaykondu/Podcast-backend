@@ -41,6 +41,8 @@ export class PodcastService {
     return await this.podcastModel.create(newPodcast)
   }
   async createEmptyPodcast(createEmptyPodcastDto, user, url, id) {
+    // createEmptyPodcastDto.podcastCategory
+    createEmptyPodcastDto.podcastCategory = ['Tarih', 'Teknoloji']
     const newPodcast: IPodcast = {
       _id: id,
       title: createEmptyPodcastDto.podcastTitle,

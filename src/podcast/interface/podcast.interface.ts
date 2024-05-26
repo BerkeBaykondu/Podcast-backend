@@ -28,6 +28,6 @@ export namespace IPodcast {
 }
 
 export enum Category {
-  AileveSaglık = 'Aile ve Sağlık',
+  Tarih = 'Tarih',
   Teknoloji = 'Teknoloji',
 }
