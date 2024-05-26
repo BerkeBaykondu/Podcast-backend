@@ -31,7 +31,6 @@ export class UserService {
         model: 'Podcast',
       })
       .exec()
-    //return await this.podcastService.findPodcastByUser(user)
   }
 
   // gereksiz

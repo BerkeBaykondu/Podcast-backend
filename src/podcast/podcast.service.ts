@@ -37,8 +37,8 @@ export class PodcastService {
       totalLike: 0,
       owner: user,
     }
-    const podcast = await this.podcastModel.create(newPodcast)
-    return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
+    await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: id } }, { new: true })
+    return await this.podcastModel.create(newPodcast)
   }
   async createEmptyPodcast(createEmptyPodcastDto, user, url, id) {
     const newPodcast: IPodcast = {
@@ -51,8 +51,8 @@ export class PodcastService {
       totalLike: 0,
       owner: user,
     }
-    const podcast = await this.podcastModel.create(newPodcast)
-    return await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: podcast!._id } }, { new: true })
+    await this.userService.findOneAndUpdate({ user_id: user }, { $push: { createdPodcastList: id } }, { new: true })
+    return await this.podcastModel.create(newPodcast)
   }
 
   async deletePodcast(podcastId: any, user_id): Promise<any> {

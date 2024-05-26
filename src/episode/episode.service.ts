@@ -35,7 +35,7 @@ export class EpisodeService {
 
   async updateDataEpisode(episodeId, podcastId, user, updateEpisodeDto) {
     console.log(user)
-    return await this.podcastService.findOneAndUpdate(
+    return await await this.podcastService.findOneAndUpdate(
       { _id: podcastId, owner: user, 'episodes._id': episodeId },
       { $set: { 'episodes.$.title': updateEpisodeDto.episodeTitle, 'episodes.$.description': updateEpisodeDto.episodeDescription } },
       { new: true },
