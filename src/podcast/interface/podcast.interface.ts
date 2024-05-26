@@ -30,4 +30,11 @@ export namespace IPodcast {
 export enum Category {
   Tarih = 'Tarih',
   Teknoloji = 'Teknoloji',
+  Haber = 'Haber',
+  Söyleşi = 'Söyleşi',
+  Biyografi = 'Biyografi',
+  Sanat = 'Sanat',
+  Edebiyat = 'Edebiyat',
+  Müzik = 'Müzik',
+  Spor = 'Spor',
 }
