@@ -30,29 +30,29 @@ export class AwsController {
     private readonly awsService: AwsService,
     private readonly podcastService: PodcastService,
   ) {}
-  @Post('withEpisode')
-  @UseInterceptors(FilesInterceptor('file', 2))
-  async createPodcastWithFirstEpisode(
-    @UploadedFiles(new FileTypePipe())
-    files: Array<Express.Multer.File>,
-    @Body()
-    createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode,
-    @Req() req,
-  ) {
-    return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
-  }
+  // @Post('withEpisode')
+  // @UseInterceptors(FilesInterceptor('file', 2))
+  // async createPodcastWithFirstEpisode(
+  //   @UploadedFiles(new FileTypePipe())
+  //   files: Array<Express.Multer.File>,
+  //   @Body()
+  //   createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode,
+  //   @Req() req,
+  // ) {
+  //   return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
+  // }
 
-  @Post('emptyPodcast')
-  @UseInterceptors(FileInterceptor('file'))
-  async createEmptyPodcast(
-    @UploadedFile()
-    file: Express.Multer.File,
-    @Body()
-    createEmptyPodcastDto: IPodcast.IUploadPodcast,
-    @Req() req,
-  ) {
-    return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
-  }
+  // @Post('emptyPodcast')
+  // @UseInterceptors(FileInterceptor('file'))
+  // async createEmptyPodcast(
+  //   @UploadedFile()
+  //   file: Express.Multer.File,
+  //   @Body()
+  //   createEmptyPodcastDto: IPodcast.IUploadPodcast,
+  //   @Req() req,
+  // ) {
+  //   return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
+  // }
 
   @Post('denemee')
   @UseInterceptors(FileInterceptor('file'))
@@ -64,47 +64,47 @@ export class AwsController {
     return file
   }
 
-  @Post('addEpisode/:podcastId')
-  @UseInterceptors(FileInterceptor('file'))
-  async createEpisode(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
-      }),
-    )
-    file: Express.Multer.File,
-    @Body()
-    createEmptyPodcastDto: IEpisode.IAddEpisode,
-    @Req() req,
-    @Param('podcastId') podcastId,
-  ) {
-    return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, podcastId)
-  }
+  // @Post('addEpisode/:podcastId')
+  // @UseInterceptors(FileInterceptor('file'))
+  // async createEpisode(
+  //   @UploadedFile(
+  //     new ParseFilePipe({
+  //       validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+  //     }),
+  //   )
+  //   file: Express.Multer.File,
+  //   @Body()
+  //   createEmptyPodcastDto: IEpisode.IAddEpisode,
+  //   @Req() req,
+  //   @Param('podcastId') podcastId,
+  // ) {
+  //   return await this.awsService.addEpisode(file, createEmptyPodcastDto, req.user, podcastId)
+  // }
 
-  @Delete('deletePodcast/:podcastId')
-  async deleteFile(@Param('podcastId') podcastId, @Req() req) {
-    return await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
-  }
+  // @Delete('deletePodcast/:podcastId')
+  // async deleteFile(@Param('podcastId') podcastId, @Req() req) {
+  //   return await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
+  // }
 
-  @Delete('deleteEpisode/:podcastId/:episodeId')
-  async deleteEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req) {
-    return await this.awsService.deleteEpisode(req.user, episodeId, podcastId)
-  }
+  // @Delete('deleteEpisode/:podcastId/:episodeId')
+  // async deleteEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req) {
+  //   return await this.awsService.deleteEpisode(req.user, episodeId, podcastId)
+  // }
 
-  // Update File
-  @Patch('updateEpisode/:podcastId/:episodeId')
-  @UseInterceptors(FileInterceptor('file'))
-  async updateEpisode(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
-      }),
-    )
-    file: Express.Multer.File,
-    @Param('episodeId') episodeId,
-    @Param('podcastId') podcastId,
-    @Req() req,
-  ) {
-    return await this.awsService.updateEpisodeFile(file, req.user, episodeId, podcastId)
-  }
+  // // Update File
+  // @Patch('updateEpisode/:podcastId/:episodeId')
+  // @UseInterceptors(FileInterceptor('file'))
+  // async updateEpisode(
+  //   @UploadedFile(
+  //     new ParseFilePipe({
+  //       validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+  //     }),
+  //   )
+  //   file: Express.Multer.File,
+  //   @Param('episodeId') episodeId,
+  //   @Param('podcastId') podcastId,
+  //   @Req() req,
+  // ) {
+  //   return await this.awsService.updateEpisodeFile(file, req.user, episodeId, podcastId)
+  // }
 }

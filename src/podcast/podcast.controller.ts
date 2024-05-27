@@ -1,15 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Req, UseGuards, UploadedFile, UploadedFiles } from '@nestjs/common'
 import { PodcastService } from './podcast.service'
 
 import { UpdatePodcastDto } from './interface/update-podcast.dto'
 import { IPodcast } from './interface/podcast.interface'
 import { TypedBody, TypedRoute } from '@nestia/core'
 import { AuthGuard } from '../core/guard/auth.guard'
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express'
+import { AwsService } from 'src/aws/aws.service'
+import { FileTypePipe } from 'src/core/pipe/upload.pipe'
 
 @Controller('podcast')
 @UseGuards(AuthGuard)
 export class PodcastController {
-  constructor(private readonly podcastService: PodcastService) {}
+  constructor(
+    private readonly podcastService: PodcastService,
+    private readonly awsService: AwsService,
+  ) {}
+
+  // Post Podcast
+  @Post()
+  @UseInterceptors(FileInterceptor('file'))
+  async createEmptyPodcast(
+    @UploadedFile()
+    file: Express.Multer.File,
+    @Body()
+    createEmptyPodcastDto: IPodcast.IUploadPodcast,
+    @Req() req,
+  ) {
+    return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
+  }
+
+  //Post podcast with Episode ( şimdlik kullanılmayacak)
+  @Post('with-episode')
+  @UseInterceptors(FilesInterceptor('file', 2))
+  async createPodcastWithFirstEpisode(
+    @UploadedFiles(new FileTypePipe())
+    files: Array<Express.Multer.File>,
+    @Body()
+    createPodcastDto: IPodcast.ICreatePodcastWithFirstEpisode,
+    @Req() req,
+  ) {
+    return await this.awsService.createPodcastWithFirstEpisode(files, createPodcastDto, req.user)
+  }
+
+  // Delete Podcast
+  @Delete(':podcastId')
+  async deleteFile(@Param('podcastId') podcastId, @Req() req) {
+    return await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
+  }
+
+  // Get Podcast ( main page)
+  @Get()
+  findMainPage() {
+    return this.podcastService.findMainPage()
+  }
 
   // fetch Trt Podcast
   @Get('fetchTrtPodcast')
@@ -19,13 +63,9 @@ export class PodcastController {
 
   // Bir kullanıcının bütün podcastleri
 
-  @Get('withEpisode')
+  @Get('all')
   findAll() {
     return this.podcastService.findAll()
-  }
-  @Get()
-  findMainPage() {
-    return this.podcastService.findMainPage()
   }
 
   // user podcast interactions
