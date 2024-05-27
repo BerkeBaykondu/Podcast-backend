@@ -7,7 +7,7 @@ import { TypedBody, TypedRoute } from '@nestia/core'
 import { AuthGuard } from '../core/guard/auth.guard'
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express'
 import { AwsService } from 'src/aws/aws.service'
-import { FileTypePipe } from 'src/core/pipe/upload.pipe'
+import { FileTypePipe } from '../core/pipe/upload.pipe'
 
 @Controller('podcast')
 @UseGuards(AuthGuard)
