@@ -30,6 +30,23 @@ export class PodcastController {
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
 
+  @Patch('file/:podcastId')
+  @UseInterceptors(FileInterceptor('file'))
+  async updateFilePodcast(
+    @UploadedFile()
+    file: Express.Multer.File,
+    @Param('podcastId') podcastId,
+    @Req()
+    req,
+  ) {
+    return await this.awsService.updatePodcastFile(file, req.user, podcastId)
+  }
+
+  @Patch('data/:podcastId')
+  async updateDataPodcast(@Param('podcastId') podcastId, @Req() req, @Body() updatePodcastDto: IPodcast.IUpdatePodcast) {
+    return this.podcastService.updateDataPocast(req.user, podcastId, updatePodcastDto)
+  }
+
   //Post podcast with Episode ( şimdlik kullanılmayacak)
   @Post('with-episode')
   @UseInterceptors(FilesInterceptor('file', 2))

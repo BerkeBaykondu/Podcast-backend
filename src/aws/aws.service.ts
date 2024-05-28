@@ -171,5 +171,30 @@ export class AwsService {
     return this.episodeService.updateEpisode(episodeId, user, podcastId, url)
   }
 
-  async updatePodcastFile(file, userId, episodeId, podcastId) {}
+  async updatePodcastFile(file, user, podcastId) {
+    await this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${podcastId}`,
+      }),
+    )
+    await this.s3.send(
+      new PutObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${podcastId}`,
+        Body: file.buffer,
+      }),
+    )
+
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${podcastId}`,
+      }),
+      { expiresIn: 360000 },
+    )
+
+    return this.podcastService.updateFilePodcast(user, podcastId, url)
+  }
 }

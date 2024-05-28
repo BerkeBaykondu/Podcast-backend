@@ -10,8 +10,6 @@ export class Episode {
   @Prop({ maxlength: 150 })
   description: string
   @Prop({})
-  imageUrl: string
-  @Prop({})
   audioUrl: string
   @Prop({ default: 0 })
   totalLike: number

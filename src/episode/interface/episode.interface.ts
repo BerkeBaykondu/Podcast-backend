@@ -2,7 +2,6 @@ export interface IEpisode {
   _id?: any
   title: string
   description: string
-  imageUrl: string
   audioUrl: string
   totalLike: number
   createdAt?: any
