@@ -8,7 +8,7 @@ export type PodcastDocument = HydratedDocument<Podcast>
 export class Podcast {
   @Prop({ sparse: true, index: { unique: true, sparse: true } })
   title: string
-  @Prop({ maxlength: 150 })
+  @Prop({ maxlength: 200 })
   description: string
   @Prop({
     type: [String],

@@ -20,7 +20,6 @@ export class PodcastService {
       _id: episodeId,
       title: createPodcastDto.episodeTitle,
       description: createPodcastDto.episodeDescription,
-      imageUrl: urls[0],
       audioUrl: urls[1],
       totalLike: 0,
     }
@@ -64,6 +63,18 @@ export class PodcastService {
       { new: true },
     )
     return updatedUser
+  }
+
+  async updateFilePodcast(user, podcastId, url) {
+    return await this.podcastModel.findOneAndUpdate({ owner: user, _id: podcastId }, { $set: { imageUrl: url } })
+  }
+
+  async updateDataPocast(user, podcastId, dto) {
+    return await this.podcastModel.findOneAndUpdate(
+      { _id: podcastId, owner: user },
+      { $set: { title: dto.podcastTitle, category: dto.podcastCategory, description: dto.podcastDescription } },
+      { new: true },
+    )
   }
 
   async findAll() {

@@ -18,6 +18,12 @@ export namespace IPodcast {
     podcastDescription: string
   }
 
+  export interface IUpdatePodcast {
+    podastTitle?: string
+    podcastCategory?: string
+    podcastDescription?: string
+  }
+
   export interface ICreatePodcastWithFirstEpisode {
     podcastTitle: string
     podcastDescription: string

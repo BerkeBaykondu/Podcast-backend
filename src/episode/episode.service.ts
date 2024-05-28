@@ -16,12 +16,10 @@ export class EpisodeService {
   }
 
   async addEpisode(dto, user, url, id, episodeId) {
-    const podcast = await this.podcastService.findOne({ _id: id })
     const firstEpisode: IEpisode = {
       _id: episodeId,
       title: dto.episodeTitle,
       description: dto.episodeDescription,
-      imageUrl: podcast!.imageUrl, // bu satır yüzünden ekstra sorgu yapıyorum amk!!
       audioUrl: url,
       totalLike: 0,
     }
@@ -35,7 +33,7 @@ export class EpisodeService {
 
   async updateDataEpisode(episodeId, podcastId, user, updateEpisodeDto) {
     console.log(user)
-    return await await this.podcastService.findOneAndUpdate(
+    return await this.podcastService.findOneAndUpdate(
       { _id: podcastId, owner: user, 'episodes._id': episodeId },
       { $set: { 'episodes.$.title': updateEpisodeDto.episodeTitle, 'episodes.$.description': updateEpisodeDto.episodeDescription } },
       { new: true },
