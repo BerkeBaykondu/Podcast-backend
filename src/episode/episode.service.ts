@@ -41,22 +41,18 @@ export class EpisodeService {
   }
 
   async deleteEpisode(user, episodeId, podcastId) {
-    return await this.podcastService.findOneAndUpdate({ _id: podcastId }, { $pull: { episodes: { _id: episodeId } } }, { new: true })
+    return await this.podcastService.findOneAndUpdate({ _id: podcastId, owner: user }, { $pull: { episodes: { _id: episodeId } } }, { new: true })
   }
 
-  findAll() {
-    return `This action returns all episode`
-  }
+  async locateEpisode(user, episodeId, newEpisodeId, newPodcastId, podcastId, url) {
+    // return await this.podcastService.findOne(
+    //   { _id: podcastId, owner: user, 'episodes._id': episodeId },
+    // )
 
-  findOne(id: number) {
-    return `This action returns a #${id} episode`
-  }
+    const episode = await this.podcastModel.findOne({ _id: podcastId, 'episodes._id': episodeId }, { 'episodes.$': 1 }).exec()
 
-  update(id: number) {
-    return `This action updates a #${id} episode`
-  }
+    console.log('episode', episode)
 
-  remove(id: number) {
-    return `This action removes a #${id} episode`
+    return await this.podcastService.moveEpisodeBetweenPodcasts(podcastId, newPodcastId, episodeId, newEpisodeId, user)
   }
 }
