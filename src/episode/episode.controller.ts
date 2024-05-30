@@ -56,7 +56,7 @@ export class EpisodeController {
   async createEpisode(
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'audio/mpeg' })],
+        validators: [new FileTypeValidator({ fileType: 'audio' })],
       }),
     )
     file: Express.Multer.File,
@@ -72,5 +72,12 @@ export class EpisodeController {
   @Delete(':podcastId/:episodeId')
   async deleteEpisode(@Param('episodeId') episodeId, @Param('podcastId') podcastId, @Req() req) {
     return await this.awsService.deleteEpisode(req.user, episodeId, podcastId)
+  }
+
+  // locateEpisode
+  @Patch('locate/:podcastId/:episodeId')
+  async locateEpisode(@Param('episodeId') episodeId, @Param(':podcastId') podcastId, @Req() req, @Body() newPodcastId) {
+    console.log('mokokoko')
+    return await this.awsService.locateEpisode(req.user, podcastId, episodeId, newPodcastId)
   }
 }

@@ -1,4 +1,5 @@
 import {
+  CopyObjectCommand,
   DeleteObjectCommand,
   DeleteObjectsCommand,
   GetObjectCommand,
@@ -196,5 +197,37 @@ export class AwsService {
     )
 
     return this.podcastService.updateFilePodcast(user, podcastId, url)
+  }
+
+  async locateEpisode(user, podcastId, episodeId, newPodcastId) {
+    const newEpisodeId = new ObjectId().toHexString()
+    console.log(typeof `${user}/${newPodcastId.newPodcastId}/${newEpisodeId}`)
+    console.log(`${user}/${newPodcastId.newPodcastId}/${newEpisodeId}`)
+    await this.s3.send(
+      new CopyObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        CopySource: `${user}/${podcastId}/${episodeId}`,
+        Key: `${user}/${newPodcastId.newPodcastId}/${newEpisodeId}`,
+      }),
+    )
+    await this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${podcastId}/${episodeId}`,
+      }),
+    )
+
+    console.log('aaa')
+
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKETNAME,
+        Key: `${user}/${newPodcastId}/${newEpisodeId}`,
+      }),
+      { expiresIn: 360000 },
+    )
+    console.log(url)
+    return await this.episodeService.locateEpisode(user, episodeId, newEpisodeId, newPodcastId, podcastId, url)
   }
 }

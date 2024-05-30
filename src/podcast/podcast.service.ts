@@ -77,6 +77,23 @@ export class PodcastService {
     )
   }
 
+  async moveEpisodeBetweenPodcasts(podcastId, newPodcastId, episodeId, newEpisodeId, user) {
+    return await this.podcastModel.bulkWrite([
+      {
+        updateOne: {
+          filter: { _id: podcastId, owner: user },
+          update: { $pull: { episodes: { _id: episodeId } } },
+        },
+      },
+      {
+        updateOne: {
+          filter: { _id: newPodcastId, owner: user },
+          update: { $push: { episodes: { _id: newEpisodeId } } },
+        },
+      },
+    ])
+  }
+
   async findAll() {
     return await this.podcastModel.find()
   }
