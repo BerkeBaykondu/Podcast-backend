@@ -77,6 +77,18 @@ export class PodcastService {
     )
   }
 
+  async getDynamicPodcast() {
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    return this.podcastModel
+      .aggregate([
+        { $unwind: '$episodes' },
+        { $match: { 'episodes.createdAt': { $gte: twentyFourHoursAgo } } },
+        { $group: { _id: '$_id', podcast: { $first: '$$ROOT' }, episodes: { $push: '$episodes' } } },
+        { $project: { 'podcast.episodes': '$episodes' } },
+      ])
+      .exec()
+  }
+
   async moveEpisodeBetweenPodcasts(podcastId, newPodcastId, episodeId, newEpisodeId, user) {
     return await this.podcastModel.bulkWrite([
       {
@@ -144,16 +156,21 @@ export class PodcastService {
             set.contents.map(async (content) => {
               delete content.featuredImage
 
+              //console.log(content)
+
               if (index == 0) {
-                content.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 400, 400)
+                content.imageUrl = await this.modifyPodcastImage(content.imageUrl, 400, 400)
                 trtData.featuredPodcasts = set
               } else if (index == 1) {
-                content.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 300, 300)
+                content.imageUrl = await this.modifyPodcastImage(content.imageUrl, 300, 300)
                 trtData.podcastGenres = set
               } else {
-                content.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 200, 200)
+                content.imageUrl = await this.modifyPodcastImage(content.imageUrl, 200, 200)
               }
-              return content
+              console.log(content.path)
+              await fetch(`https://www.trtdinle.com/api/detail?path=${content.path}`).then((episodeData) => {
+                return episodeData.json()
+              })
             }),
           ),
         }

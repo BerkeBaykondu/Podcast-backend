@@ -67,7 +67,7 @@ export class PodcastController {
   }
 
   // Get Podcast ( main page)
-  @Get()
+  @Get('static')
   findMainPage() {
     return this.podcastService.findMainPage()
   }
@@ -83,6 +83,11 @@ export class PodcastController {
   @Get('all')
   findAll() {
     return this.podcastService.findAll()
+  }
+
+  @Get()
+  dynamicPodcasts() {
+    return this.podcastService.getDynamicPodcast()
   }
 
   // user podcast interactions
