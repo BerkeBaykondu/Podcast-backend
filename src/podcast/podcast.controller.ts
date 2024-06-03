@@ -18,6 +18,7 @@ export class PodcastController {
   ) {}
 
   // Post Podcast
+  //@UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async createEmptyPodcast(
@@ -30,6 +31,7 @@ export class PodcastController {
     return await this.awsService.createEmptyPodcast(file, createEmptyPodcastDto, req.user)
   }
 
+  @UseGuards(AuthGuard)
   @Patch('file/:podcastId')
   @UseInterceptors(FileInterceptor('file'))
   async updateFilePodcast(
@@ -42,12 +44,14 @@ export class PodcastController {
     return await this.awsService.updatePodcastFile(file, req.user, podcastId)
   }
 
+  @UseGuards(AuthGuard)
   @Patch('data/:podcastId')
   async updateDataPodcast(@Param('podcastId') podcastId, @Req() req, @Body() updatePodcastDto: IPodcast.IUpdatePodcast) {
     return this.podcastService.updateDataPocast(req.user, podcastId, updatePodcastDto)
   }
 
   //Post podcast with Episode ( şimdlik kullanılmayacak)
+  @UseGuards(AuthGuard)
   @Post('with-episode')
   @UseInterceptors(FilesInterceptor('file', 2))
   async createPodcastWithFirstEpisode(
@@ -61,6 +65,7 @@ export class PodcastController {
   }
 
   // Delete Podcast
+  @UseGuards(AuthGuard)
   @Delete(':podcastId')
   async deleteFile(@Param('podcastId') podcastId, @Req() req) {
     return await Promise.allSettled([this.awsService.deletePodcast(req.user, podcastId), this.podcastService.deletePodcast(podcastId, req.user)])
@@ -80,37 +85,45 @@ export class PodcastController {
 
   // Bir kullanıcının bütün podcastleri
 
+  @UseGuards(AuthGuard)
   @Get('all')
   findAll() {
     return this.podcastService.findAll()
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   dynamicPodcasts() {
     return this.podcastService.getDynamicPodcast()
   }
 
   // user podcast interactions
+  @UseGuards(AuthGuard)
   @Post('like/:podcastId')
   likePodcast(@Param('podcastId') podcastId: string, @Req() req) {
     return this.podcastService.likePodcast(req.user, podcastId)
   }
+  @UseGuards(AuthGuard)
   @Post('removeLike/:podcastId')
   removeLikedPodcast(@Param('podcastId') podcastId: string, @Req() req) {
     return this.podcastService.removeLikedPodcast(req.user, podcastId)
   }
+  @UseGuards(AuthGuard)
   @Post('pin/:podcastId')
   pinPodcast(@Param('podcastId') podcastId: string, @Req() req) {
     return this.podcastService.pinPodcast(req.user, podcastId)
   }
+  @UseGuards(AuthGuard)
   @Post('removePin/:podcastId')
   removePinnedPodcast(@Param('podcastId') podcastId: string, @Req() req) {
     return this.podcastService.removePinnedPodcast(req.user, podcastId)
   }
+  @UseGuards(AuthGuard)
   @Post('archive/:pdocastId')
   archivePodcast(@Param('podcastId') podcastId: string, @Req() req) {
     return this.podcastService.archivePodcast(req.user, podcastId)
   }
+  @UseGuards(AuthGuard)
   @Post('removeArchive/podcastId')
   removeArchivedPodcast(@Param('podcastId') podcastId: string, @Req() req) {
     return this.podcastService.removeArchivedPodcast(req.user, podcastId)
