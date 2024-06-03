@@ -10,7 +10,7 @@ import { AwsService } from 'src/aws/aws.service'
 import { FileTypePipe } from '../core/pipe/upload.pipe'
 
 @Controller('podcast')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class PodcastController {
   constructor(
     private readonly podcastService: PodcastService,
@@ -18,7 +18,7 @@ export class PodcastController {
   ) {}
 
   // Post Podcast
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async createEmptyPodcast(
