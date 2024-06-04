@@ -17,4 +17,9 @@ export namespace IEpisode {
     episodeTitle?: string
     episodeDescription?: string
   }
+  export interface ITrtEpisode {
+    episodeTitle?: string
+    episodeDescription?: string
+    episodeAudioUrl: string
+  }
 }
