@@ -133,52 +133,34 @@ export class PodcastService {
       return trtData.json()
     })
 
-    // delete unnecessary output
-    delete trtData.description
-    delete trtData.featuredImage
-    delete trtData.isLiked
-    delete trtData.isFavorite
-    delete trtData.score
-    delete trtData.popularity
-    delete trtData.popular
+    trtData.sets
+      .filter((set) => set.index >= 3)
+      .map((set) => set.contents)
+      .forEach((contents) => {
+        contents.forEach(async (content) => {
+          const episodes = await fetch(`https://www.trtdinle.com/api/detail?path=${content.path}`).then((episodes) => {
+            return episodes.json()
+          })
+          let xx: any = []
+          episodes.items.map((item) => {
+            xx.push({
+              title: item.title.substring(0, 100),
+              description: item.description.substring(0, 100),
+              audioUrl: item.audio.url,
+            })
+          })
+          await this.podcastModel.create({
+            owner: '11111111-1111-1111-1111-111111111111',
+            title: content.title.substring(0, 100),
+            description: content.description.substring(0, 100),
+            imageUrl: await this.modifyPodcastImage(content.imageUrl, 200, 200),
+            episodes: xx,
+          })
+        })
+      })
 
-    trtData.imageUrl = await this.modifyPodcastImage(trtData.imageUrl, 300, 300)
-    trtData.homepageImage = await this.modifyPodcastImage(trtData.homepageImage, 300, 300)
-
-    await Promise.all(
-      trtData.sets.map(async (set, index) => {
-        delete set.featuredImage
-        delete set.layout
-        delete set.index
-        return {
-          ...set,
-          contents: await Promise.all(
-            set.contents.map(async (content) => {
-              delete content.featuredImage
-
-              //console.log(content)
-
-              if (index == 0) {
-                content.imageUrl = await this.modifyPodcastImage(content.imageUrl, 400, 400)
-                trtData.featuredPodcasts = set
-              } else if (index == 1) {
-                content.imageUrl = await this.modifyPodcastImage(content.imageUrl, 300, 300)
-                trtData.podcastGenres = set
-              } else {
-                content.imageUrl = await this.modifyPodcastImage(content.imageUrl, 200, 200)
-              }
-              console.log(content.path)
-              await fetch(`https://www.trtdinle.com/api/detail?path=${content.path}`).then((episodeData) => {
-                return episodeData.json()
-              })
-            }),
-          ),
-        }
-      }),
-    )
-    trtData.sets = trtData.sets.slice(3)
-
-    return trtData
+    // await this.podcastModel.create({})
+    // await this.userService.findOneAndUpdate({ id: '11111111-1111-1111-1111-111111111111' }, { $push: { likedPodcastList: "xx" } }, { new: true })
   }
 
   async modifyPodcastImage(imageUrl, width, height) {
